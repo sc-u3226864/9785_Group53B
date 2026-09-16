@@ -35,7 +35,7 @@ Roles will stay fixed, but where confusion or blockers arise, we'll resolve them
 * Documenting Gen AI use
 * Rotating a "checker" each sprint so QA isn't left to one person
 
-## Tools
+## Relationships
 We use a combination of Microsoft and GitHub tools to track progress, communicate, and store files:
 
 * **GitHub Projects** – foundation of our sprints; tracks tasks and allocates responsibilities
