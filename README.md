@@ -23,10 +23,10 @@ These roles may shift as expectations change and blockers arise. Our goal is to 
 
 | Name | Role | Scope | Responsibility |
 |---|---|---|---|
-| Danica | Frontend/UI | Public site, dashboards, UC theming, Poster Design | Component design and scaffolding, styling, wireframes, accessibility checks (WCAG table), poster and slide design |
-| Lachlan | Backend/API | App logic, auth, roles & permissions, automated emails, EOI workflows | Boilerplate endpoints, auth flows, code review, automation and application logic setup |
-| Laiba | Database & Infra | Database schema, hosting (cloud/Docker/AWS), CI | Schema design, deployment configs, system architecture/data flow diagram, hosting investigation, integration |
-| Sophia | Comms & Docs/Testing | Testing, stakeholder comms, project proposal, charter & report, GitHub hygiene, overall helper | Test case generation, debugging, charter, project proposal, final report, doc drafts, email templates, blocker support, slide content |
+| Danica: **Dani-hub433** | Frontend/UI | Public site, dashboards, UC theming, Poster Design | Component design and scaffolding, styling, wireframes, accessibility checks (WCAG table), poster and slide design |
+| Lachlan: **shlooop** | Backend/API | App logic, auth, roles & permissions, automated emails, EOI workflows | Boilerplate endpoints, auth flows, code review, automation and application logic setup |
+| Laiba: **ahmedlaiba6** | Database & Infra | Database schema, hosting (cloud/Docker/AWS), CI | Schema design, deployment configs, system architecture/data flow diagram, hosting investigation, integration |
+| Sophia: **sc-u3226864** | Comms & Docs/Testing | Testing, stakeholder comms, project proposal, charter & report, GitHub hygiene, overall helper | Test case generation, debugging, charter, project proposal, final report, doc drafts, email templates, blocker support, slide content |
 
 Responsibilities are defined above, but we recognise everyone has different schedules and occasional extenuating circumstances. If something falls behind, we'll hold each other accountable and redistribute work rather than let it stall. We aim for fairness, but ultimately we'll be satisfied as long as we're happy with the result and everyone has tried their best.
 
