@@ -1,0 +1,44 @@
+## Data present within all non-guest profiles (assuming mySQL) ##
+FirstName           TINYTEXT                
+LastName            TINYTEXT                
+Email               varchar(50)             P-KEY
+Roles               string                  (named as such under the expectation that users may need to carry the responsibilities of multiple roles)
+Password            string                  (encrypted)
+
+
+## access expectations for each role ##
+Guest / Global access (access availible to this roles is present for all other roles)
+    M  view access to showcases
+    M  submission access for EOIs
+    M  account creation request access (may be tied to EOI applications for non-university partners)
+
+
+Convenor
+    M  view access to all student teams
+    M  edit access to student teams
+    M  view and aproval access for EOIs
+    S  view access to current/future projects list
+    S  edit access for current/future projects list 
+    C  edit access for showcases
+    C  edit access to the resources page
+
+
+Mentor
+    M  view access to student team(s) that the mentor is supporting
+    S  view access to current/future projects list
+
+
+Sponsor
+    M  view access to the student team(s) that the sponsor owns
+
+
+Student
+    M  view and EOI submission access for current projects
+    M  view access to the student team that the student is a part of
+    M  view access to the resources page
+    C  edit access to a student team information area (allows for students to maintain links to or display things like team charters)
+
+
+Administrator (This role has access present in any other role)
+    M  create, view, edit, and delete access for user accounts
+    M  account creation request aproval (may need to be made availible to convenor instead, with the limitation of not being able to make new convenors)
