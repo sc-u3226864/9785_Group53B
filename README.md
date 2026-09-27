@@ -46,3 +46,13 @@ We use a combination of Microsoft and GitHub tools to track progress, communicat
 
 ## Relationships
 We track deadlines through our GitHub project and weekly scrum meetings, addressing blockers as they arise and reallocating tasks where needed. For conflict resolution, we prioritise clear communication, discussion, compromise, and voting to work through disagreements. If conflict persists despite these efforts, we'll escalate it to the lecturer for intervention.
+
+## Getting Started
+Prerequisites
+- Node.js v24.19.0(LTS)
+- Docker Desktop & Docker CLI v29.8.0 
+- WSL2 if on windows
+- Git 2.55.0
+
+### Common Issues
+install version not showing when running {technology} -v (powershell): VS Code needed a restart after Node.js, Docker and Git were installed
