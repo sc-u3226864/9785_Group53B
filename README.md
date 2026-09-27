@@ -56,3 +56,16 @@ Prerequisites
 
 ### Common Issues
 install version not showing when running {technology} -v (powershell): VS Code needed a restart after Node.js, Docker and Git were installed
+
+### Steps
+1. after installing all prerequisites clone to your IDE (we have agreed on VSCode)
+2. create a new .env file to store your postgres credentials:
+```powershell
+Copy-Item .env.example .env
+```
+3. input your own username and password and change the DATABASE_URL to match
+4. check you can start the container
+```powershell
+cd my-capstone
+docker compose up -d
+```
