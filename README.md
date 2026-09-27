@@ -52,7 +52,7 @@ Prerequisites
 - Node.js v24.19.0(LTS)
 - Docker Desktop & Docker CLI v29.8.0 
 - WSL2 if on windows
-- Git 2.55.0
+- Git v2.55.0
 
 ### Common Issues
 install version not showing when running {technology} -v (powershell): VS Code needed a restart after Node.js, Docker and Git were installed
