@@ -69,3 +69,12 @@ Copy-Item .env.example .env
 cd my-capstone
 docker compose up -d
 ```
+
+
+Note:
+Prisma ORM is used to help manage the database, for help with commands and data management see
+```powershell
+npx prisma
+```
+References
+https://www.prisma.io/docs/v7/prisma-orm/quickstart/postgresql
