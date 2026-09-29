@@ -41,4 +41,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-/generated/prisma
+/src/generated
+/.claude/worktrees/
+/.claude/settings.local.json

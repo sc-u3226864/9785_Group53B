@@ -80,3 +80,4 @@ References
 https://www.prisma.io/docs/v7/prisma-orm/quickstart/postgresql
 https://authjs.dev/getting-started/adapters/prisma
 https://authjs.dev/getting-started/authentication/oauth
+https://www.prisma.io/docs/orm/v7/prisma-migrate/workflows/seeding

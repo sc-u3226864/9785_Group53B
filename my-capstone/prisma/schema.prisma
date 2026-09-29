@@ -5,14 +5,39 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
-// Model change to test auth.js configuration
+enum Role {
+  CONVENER
+  STUDENT
+  MENTOR
+  SPONSOR
+}
+
+enum ParticipantType {
+  STUDENT
+  MENTOR
+  SPONSOR
+}
+
+enum EoiStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum ProjectStatus {
+  DRAFT
+  PUBLISHED
+  UNPUBLISHED
+}
+
+// ───────────── Auth.js models ─────────────
 
 model User {
   id            String    @id @default(cuid())
@@ -20,11 +45,18 @@ model User {
   email         String    @unique
   emailVerified DateTime?
   image         String?
-  role          Role      @default(USER)
-  accounts      Account[]
-  sessions      Session[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  role          Role?     // null = signed in, awaiting a convener
+
+  accounts        Account[]
+  sessions        Session[]
+  eois            Eoi[]               @relation("EoiApplicant")
+  reviewedEois    Eoi[]               @relation("EoiReviewer")
+  assignments     ProjectAssignment[]
+  projectsCreated Project[]           @relation("ProjectCreator")
+  posts           ShowcasePost[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Account {
@@ -63,7 +95,95 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
-enum Role {
-  USER
-  ADMIN
+// ───────────── Domain models ─────────────
+
+model Project {
+  id          String        @id @default(cuid())
+  title       String
+  slug        String        @unique
+  summary     String
+  description String
+  status      ProjectStatus @default(DRAFT)
+  capacity    Int?          /// max students; null = unlimited
+
+  createdById String
+  createdBy   User   @relation("ProjectCreator", fields: [createdById], references: [id])
+
+  eois        Eoi[]
+  assignments ProjectAssignment[]
+  posts       ShowcasePost[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+}
+
+model Eoi {
+  id           String          @id @default(cuid())
+  type         ParticipantType
+  status       EoiStatus       @default(PENDING)
+  message      String
+  organisation String?
+
+  applicantId String
+  applicant   User    @relation("EoiApplicant", fields: [applicantId], references: [id], onDelete: Cascade)
+
+  /// Required for STUDENT EOIs; null for MENTOR/SPONSOR EOIs
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  reviewedById String?
+  reviewedBy   User?     @relation("EoiReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  reviewedAt   DateTime?
+  reviewNote   String?
+
+  assignment ProjectAssignment?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, type])
+  @@index([applicantId])
+  @@index([projectId])
+}
+
+model ProjectAssignment {
+  id   String          @id @default(cuid())
+  type ParticipantType
+
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  eoiId String? @unique
+  eoi   Eoi?    @relation(fields: [eoiId], references: [id], onDelete: SetNull)
+
+  assignedAt DateTime @default(now())
+
+  @@unique([userId, projectId])
+  @@index([projectId])
+}
+
+model ShowcasePost {
+  id          String    @id @default(cuid())
+  title       String
+  slug        String    @unique
+  excerpt     String?
+  content     String    /// Markdown
+  coverImage  String?
+  published   Boolean   @default(false)
+  publishedAt DateTime?
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published, publishedAt])
 }
