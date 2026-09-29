@@ -1,5 +1,5 @@
 //this file is used to test the prisma client connection to the database, it will add data in
-import { prisma } from "./lib/prisma";
+import { prisma } from "./src/lib/prisma";
 
 async function main() {
   // Create a new user with a post
