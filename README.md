@@ -78,3 +78,5 @@ npx prisma
 ```
 References
 https://www.prisma.io/docs/v7/prisma-orm/quickstart/postgresql
+https://authjs.dev/getting-started/adapters/prisma
+https://authjs.dev/getting-started/authentication/oauth
