@@ -1,0 +1,101 @@
+# Production stack for the EC2 server. See docs/05-aws-ec2-docker-deployment.md.
+#
+# Always run with the -f flag so it never mixes with the local dev file (docker-compose.yml):
+#   docker compose -f docker-compose.prod.yml up -d --build
+#
+# Values come from a server-side `.env` file next to this file (never committed).
+# Docker Compose reads it automatically for the ${...} values below, and `env_file`
+# passes it into the app container.
+
+name: capstone
+
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:?set POSTGRES_DB in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    # No `ports:` on purpose: the database is only reachable from other containers
+    # on the private `backend` network, never from the internet.
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # One-shot job: applies any new migrations in prisma/migrations, then exits.
+  migrate:
+    build:
+      context: .
+      target: migrator
+    image: capstone-migrator:latest
+    restart: "no"
+    env_file: .env
+    environment:
+      # Inside Docker the database host is the service name `db`, not localhost.
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?schema=public
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - backend
+
+  app:
+    build:
+      context: .
+      target: runner
+    image: capstone-app:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?schema=public
+      AUTH_TRUST_HOST: ${AUTH_TRUST_HOST:-true}
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    # Default: only reachable from the server itself (Caddy forwards to it).
+    # Without a domain/Caddy, set APP_BIND=0.0.0.0 and APP_PORT=80 in .env.
+    ports:
+      - "${APP_BIND:-127.0.0.1}:${APP_PORT:-3000}:3000"
+    networks:
+      - backend
+      - frontend
+
+  # Optional HTTPS reverse proxy. Only starts with: --profile https
+  caddy:
+    image: caddy:2
+    profiles: ["https"]
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN:-}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - app
+    networks:
+      - frontend
+
+networks:
+  # internal: containers on this network have no internet access and can't be reached from outside.
+  backend:
+    internal: true
+  frontend: {}
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:

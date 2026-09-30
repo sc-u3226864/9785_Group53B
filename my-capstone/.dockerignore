@@ -1,0 +1,25 @@
+# Keep the Docker build context small and free of secrets.
+node_modules
+.next
+out
+build
+coverage
+src/generated
+
+# Secrets: the server's .env is passed to containers at runtime by docker compose, never baked into images.
+.env
+.env.*
+!.env.example
+
+.git
+.gitignore
+.claude
+.vscode
+*.md
+Dockerfile
+.dockerignore
+docker-compose*.yml
+Caddyfile
+npm-debug.log*
+*.tsbuildinfo
+next-env.d.ts
