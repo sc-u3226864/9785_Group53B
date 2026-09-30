@@ -1,0 +1,48 @@
+# Deploys the app to the EC2 server whenever `main` changes.
+# Setup guide: docs/05-aws-ec2-docker-deployment.md ("Automated deploys with GitHub Actions").
+#
+# Needs, in GitHub > Settings > Secrets and variables > Actions:
+#   Secrets:   EC2_HOST (Elastic IP or domain), EC2_USER (ubuntu), EC2_SSH_KEY (private key, full text)
+#   Variables: DEPLOY_ENABLED = true   (until this is set, the job is skipped instead of failing)
+
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "my-capstone/**"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch: # adds a "Run workflow" button in the Actions tab
+
+# Never run two deploys at the same time; queue the newer one.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    if: vars.DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Pull latest code and rebuild containers on EC2
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          command_timeout: 25m
+          script: |
+            set -e
+            cd ~/9785_Group53B/my-capstone
+            git fetch origin main
+            git checkout main
+            git pull --ff-only origin main
+            echo "Deploying commit $(git rev-parse --short HEAD)"
+            docker compose -f docker-compose.prod.yml up -d --build --remove-orphans
+            docker compose -f docker-compose.prod.yml ps
+            docker image prune -f

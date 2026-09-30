@@ -1,0 +1,9 @@
+# Caddy reverse proxy config, used only by the optional `caddy` service in
+# docker-compose.prod.yml (started with `--profile https`).
+# DOMAIN comes from the server's .env file, e.g. DOMAIN=projects.example.com
+# Caddy gets and renews a free HTTPS certificate for it automatically.
+
+{$DOMAIN} {
+	encode gzip
+	reverse_proxy app:3000
+}
