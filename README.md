@@ -76,7 +76,7 @@ Prisma ORM is used to help manage the database, for help with commands and data 
 ```powershell
 npx prisma
 ```
-References
+### References
 https://www.prisma.io/docs/v7/prisma-orm/quickstart/postgresql
 https://authjs.dev/getting-started/adapters/prisma
 https://authjs.dev/getting-started/authentication/oauth
