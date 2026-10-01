@@ -158,6 +158,18 @@ sudo apt install gh                   # Ubuntu 24.04+ (or see https://github.com
 ---
 
 ## 2. Configure Git and sign in to GitHub
+SC - this stuff below is too much use the GUI
+
+<img width="56" height="391" alt="image" src="https://github.com/user-attachments/assets/a3cec7a3-f90c-4f23-b30f-f4b7c1b843c3" />
+
+click on the branch > click 'clone repository' > 
+<img width="664" height="77" alt="image" src="https://github.com/user-attachments/assets/e90b3475-1122-4841-8a17-b2f1b80eb8b6" />
+
+enter URL to repository : https://github.com/sc-u3226864/9785_Group53B
+
+you'll be prompted to sign in > save it locally to your C: drive, it gets messy on a cloud location > it should populate after that
+make sure to add the file path to your trusted paths, there'll be a banner at the top of VS Code prompting this
+
 
 ### 2.1 Tell Git who you are
 Use the **same email as your GitHub account** so your commits are linked to you.
