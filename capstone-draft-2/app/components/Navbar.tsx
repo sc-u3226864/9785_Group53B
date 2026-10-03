@@ -11,10 +11,10 @@ type NavItem = { label: string; href: string}
 
 const NAV_BAR_ITEMS: NavItem[] = [
     {label: 'Home', href: '/'},
-    {label: 'Mentors', href: '/Mentors'},
-    {label: 'Sponsors', href: '/Sponsors'},
-    {label: 'Projects', href: '/Projects'},
-    {label: 'Showcase', href: '/Showcase'},
+    {label: 'Mentors', href: '/mentors'},
+    {label: 'Sponsors', href: '/sponsors'},
+    {label: 'Projects', href: '/projects'},
+    {label: 'Showcase', href: '/showcase'},
 ]
 
 //matches the highlighted page on the navbar to url path, why: all pages start with '/' so it checks for an exact match so if other 
