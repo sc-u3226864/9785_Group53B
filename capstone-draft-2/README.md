@@ -40,3 +40,8 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
+## references
+
+- prisma setup: https://www.prisma.io/docs/v7/prisma-orm/add-to-existing-project/prisma-postgres
+https://claude.ai/share/edc6cf10-c05a-4224-8997-57681fc5bfef
+
