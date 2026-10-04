@@ -86,4 +86,15 @@ model Authenticator {
   @@id([userId, credentialID])
 }
 
+// Sponsor EOI schema for form
 
+
+
+
+// Mentor EOI schema for form
+
+// Sponsor project proposal form
+
+// Convener available project post
+
+// Convener showcase post 
