@@ -1,11 +1,12 @@
-import ExpressInterest from "@/app/components/MentorEOISubmission";
+import MentorExpressInterest from "@/app/components/MentorEOISubmission";
+
 
 
 export default function MentorsPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold">Mentors</h1>
-      <ExpressInterest />
+      <MentorExpressInterest />
     </div>
   );
 }

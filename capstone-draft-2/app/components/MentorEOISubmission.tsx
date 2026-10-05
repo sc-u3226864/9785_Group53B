@@ -14,7 +14,7 @@ export type MentorEOIInput = {
   ExperienceSummary: string;
 };
 
-export default function ExpressInterest() {
+export default function MentorExpressInterest() {
   const [open, setOpen] = useState(false); // tracks if the form is open or not
   const [submitted, setSubmitted] = useState(false); // tracks if the form has been submitted or not
 
