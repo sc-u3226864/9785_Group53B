@@ -86,15 +86,64 @@ model Authenticator {
   @@id([userId, credentialID])
 }
 
+//Schema made with: https://www.prismabuilder.io/
+
 // Sponsor EOI schema for form
-
-
-
+model SponsorEOIForm {
+  FormId            String    @id @unique @default(cuid())
+  DateCreated       DateTime? @default(now())
+  FirstName         String
+  LastName          String
+  Email             String
+  PhoneNo           String?
+  ProfessionalTitle String
+  ExperienceSummary String
+}
 
 // Mentor EOI schema for form
+model MentorEOIForm {
+  FormId            String    @id @unique @default(cuid())
+  DateCreated       DateTime? @default(now())
+  FirstName         String
+  LastName          String
+  Email             String
+  PhoneNo           String?
+  ProfessionalTitle String
+  ExperienceSummary String
+}
 
 // Sponsor project proposal form
+model ProjectProposalForm {
+  FormId         String    @id @unique @default(cuid())
+  CreationDate   DateTime? @default(now())
+  ProposalTitle  String
+  Sponsor        String
+  SponsorCompany String?
+  Description    String
+  Scope          String
+  SkillsRequired String
+}
 
-// Convener available project post
+// Convener available project post > takes sponsor proposal and fills some details
 
 // Convener showcase post 
+
+model ShowcasePost {
+  ShowcasePostId  String  @id @unique @default(cuid())
+  SemesterAndYear String
+  Description     String
+  SponsorName     String
+  SponsorCompany  String?
+  StudentName1    String?
+  StudentName2    String?
+  StudentName3    String?
+  StudentName4    String?
+}
+
+// roles
+enum Role {
+  CONVENER
+  MENTOR
+  SPONSOR
+  STUDENT
+}
