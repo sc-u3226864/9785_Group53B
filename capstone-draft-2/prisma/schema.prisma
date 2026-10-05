@@ -115,6 +115,7 @@ model MentorEOIForm {
 // Sponsor project proposal form
 model ProjectProposalForm {
   FormId         String    @id @unique @default(cuid())
+  UserName       String   //we'll need to grab this field from the signed in user data
   CreationDate   DateTime? @default(now())
   ProposalTitle  String
   Sponsor        String
