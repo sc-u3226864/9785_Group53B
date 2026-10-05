@@ -9,3 +9,5 @@ export default function SponsorPage() {
     </>
   );
 }
+
+// TO-DO: make a part restricted to sponsors signed in only, so that they can access the project proposal form
