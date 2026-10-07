@@ -14,7 +14,6 @@ datasource db {
   provider = "postgresql"
 }
 
-
 // source: https://authjs.dev/getting-started/adapters/prisma ; if we decide to use Auth.js this is the prisma adapter schema:
 // model User {
 //   id            String          @id @default(cuid())
@@ -89,6 +88,7 @@ datasource db {
 //Schema made with: https://www.prismabuilder.io/
 
 // Sponsor EOI schema for form
+
 model SponsorEOIForm {
   FormId            String    @id @unique @default(cuid())
   DateCreated       DateTime? @default(now())
@@ -101,6 +101,7 @@ model SponsorEOIForm {
 }
 
 // Mentor EOI schema for form
+
 model MentorEOIForm {
   FormId            String    @id @unique @default(cuid())
   DateCreated       DateTime? @default(now())
@@ -113,9 +114,10 @@ model MentorEOIForm {
 }
 
 // Sponsor project proposal form
+
 model ProjectProposalForm {
   FormId         String    @id @unique @default(cuid())
-  UserName       String   //we'll need to grab this field from the signed in user data, we'll make it the user email
+  UserName       String //we'll need to grab this field from the signed in user data, we'll make it the user email
   CreationDate   DateTime? @default(now())
   ProposalTitle  String
   Sponsor        String
@@ -142,6 +144,7 @@ model ShowcasePost {
 }
 
 //Project post
+
 model ProjectPost {
   id              String   @id @unique @default(cuid())
   ProjectTitle    String
@@ -156,9 +159,73 @@ model ProjectPost {
 }
 
 // roles
+
 enum Role {
   CONVENER
   MENTOR
   SPONSOR
   STUDENT
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
 }
