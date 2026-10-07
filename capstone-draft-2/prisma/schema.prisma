@@ -115,7 +115,7 @@ model MentorEOIForm {
 // Sponsor project proposal form
 model ProjectProposalForm {
   FormId         String    @id @unique @default(cuid())
-  UserName       String   //we'll need to grab this field from the signed in user data
+  UserName       String   //we'll need to grab this field from the signed in user data, we'll make it the user email
   CreationDate   DateTime? @default(now())
   ProposalTitle  String
   Sponsor        String
@@ -139,6 +139,20 @@ model ShowcasePost {
   StudentName2    String?
   StudentName3    String?
   StudentName4    String?
+}
+
+//Project post
+model ProjectPost {
+  id              String   @id @unique @default(cuid())
+  ProjectTitle    String
+  Sponsor         String
+  SponsorCompany  String?
+  Description     String
+  Scope           String
+  SkillsRequired  String
+  DataPosted      DateTime @default(now())
+  SemesterOffered String
+  YearOffered     String
 }
 
 // roles
