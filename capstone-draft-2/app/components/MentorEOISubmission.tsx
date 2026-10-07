@@ -39,8 +39,11 @@ export default function MentorExpressInterest() {
   }
 
   if (!open) {
-    return <button onClick={() => setOpen(true)}>Express Interest</button>;
+    return (
+    <button onClick={() => setOpen(true)}>Express Interest</button>
+    );
   }
+
 
   if (submitted) {
     return <p>Thanks! We&apos;ll be in touch.</p>;

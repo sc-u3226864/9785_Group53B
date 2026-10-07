@@ -3,6 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --uc-dark-background: #404d61;
 }
 
 @theme inline {
@@ -23,4 +24,21 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+button {
+  font-weight: bold;
+  border-radius: 0.5rem;
+  font-size: 1.125rem;
+  width: 12rem;
+  height: 4rem;
+  background-color: #006c91;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-content-box {
+  margin: 0px 50px 0px 50px;
 }

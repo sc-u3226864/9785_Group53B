@@ -3,10 +3,10 @@ import SponsorExpressInterest from "@/app/components/SponsorEOISubmission"
 
 export default function SponsorPage() {
   return (
-    <>
-      <h1 className="text-2xl font-bold">Sponsors</h1>
+    <div className="page-content-box">
+      <h1 className=" text-2xl font-bold">Sponsors</h1>
       <SponsorExpressInterest />
-    </>
+    </div>
   );
 }
 
