@@ -1,4 +1,4 @@
-
+//needs to be only visible to sponsors afte they've been signed up
 "use client";
 
 import { useState, type SubmitEvent } from "react";
