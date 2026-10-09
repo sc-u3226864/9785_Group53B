@@ -1,3 +1,7 @@
 export default function ProjectPage() {
-  return <h1 className="text-2xl font-bold">Project</h1>
+  return (
+  <div className="page-content-box">
+    <h1 className="text-2xl font-bold">Project</h1>
+  </div>
+  )
 }

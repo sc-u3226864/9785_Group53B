@@ -41,5 +41,10 @@ button {
 }
 
 .page-content-box {
-  margin: 0px 50px 0px 50px;
+  align-items: center;
+  margin: 20px 100px 0px 100px;
+}
+
+.title-heading {
+  text-align: center;
 }
