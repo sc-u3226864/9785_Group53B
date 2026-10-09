@@ -98,6 +98,7 @@ model SponsorEOIForm {
   PhoneNo           String?
   ProfessionalTitle String
   ExperienceSummary String
+  Approved          Boolean   @default(false)
 }
 
 // Mentor EOI schema for form
@@ -111,6 +112,7 @@ model MentorEOIForm {
   PhoneNo           String?
   ProfessionalTitle String
   ExperienceSummary String
+  Approved          Boolean   @default(false)
 }
 
 // Sponsor project proposal form
@@ -125,6 +127,7 @@ model ProjectProposalForm {
   Description    String
   Scope          String
   SkillsRequired String
+  Approved          Boolean   @default(false)
 }
 
 // Convener available project post > takes sponsor proposal and fills some details
