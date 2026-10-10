@@ -40,7 +40,7 @@ export default function MentorExpressInterest() {
 
   if (!open) {
     return (
-    <button onClick={() => setOpen(true)}>Express Interest</button>
+    <button className="eoi-button" onClick={() => setOpen(true)}>Express Interest</button>
     );
   }
 
@@ -50,16 +50,19 @@ export default function MentorExpressInterest() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input name="FirstName" placeholder="First name" required />
-      <input name="LastName" placeholder="Last name" required />
-      <input name="Email" type="email" placeholder="Email" required />
-      <input name="PhoneNo" type="tel" placeholder="Phone (optional)" />
-      <input name="ProfessionalTitle" placeholder="Professional title" required />
-      <textarea name="ExperienceSummary" placeholder="Experience summary" required />
+    <form className="form" onSubmit={handleSubmit}>
+      <p className="form-title">Mentor EOI Form</p>
+      <div className="input-container">
+        <input name="FirstName" placeholder="First name" required />
+        <input name="LastName" placeholder="Last name" required />
+        <input name="Email" type="email" placeholder="Email" required />
+        <input name="PhoneNo" type="tel" placeholder="Phone (optional)" />
+        <input name="ProfessionalTitle" placeholder="Professional title" required />
+        <textarea name="ExperienceSummary" placeholder="Experience summary" required />
 
-      <button type="submit">Submit</button>
-      <button type="button" onClick={() => setOpen(false)}>Cancel</button> {/* button to close the form without submitting */}
+        <button className="submit" type="submit">Submit</button>
+        <button type="button" onClick={() => setOpen(false)}>Cancel</button> {/* button to close the form without submitting */}
+      </div>
     </form>
   );
 }
