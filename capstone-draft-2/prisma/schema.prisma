@@ -8,6 +8,7 @@
 //Schema made with: https://www.prismabuilder.io/
 // https://claude.ai/share/b2c8d32a-bef3-4292-92c7-eb976901ee3d
 // https://www.prisma.io/docs/orm/data-modeling/relational-databases
+// https://www.prisma.io/docs/orm/fundamentals/relations-and-joins
 
 generator client {
   provider = "prisma-client"
@@ -19,36 +20,39 @@ datasource db {
 }
 
 
-// Enums: 
+// ---------- Enums
 
-enum Role {
+enum Role {     //normal users like students don't need a role because they don't have any exclusive functionality in this iteration
   CONVENER
   MENTOR
   SPONSOR
 }
 
-enum Status {
+enum Status {     //status of EOI submissions
   PENDING
   APPROVED
   REJECTED
 }
 
-// Better Auth user and session models
+// --------- Better Auth user and session models
 
 model User {
   id            String    @id
   name          String
   email         String
-  emailVerified Boolean   @default(false) //need to be verified 
+  emailVerified Boolean   @default(false) //user needs to be verify
   image         String?
-  role          Role          //role will be applied by convener when the EOI is approved
-  createdAt     DateTime  @defualt(now())
+  role          Role?          //role will be applied by convener when the EOI is approved
+  organisation  String? 
+  createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt   
-  sessions      Session[]      //this is a relation 
-  accounts      Account[]
+  sessions      Session[]      // this is a relation field which is a virtual so it won't show on the actual db schema. the [] means this is a one to many record and users can have multiple sessions running at once
+  accounts      Account[]      // same goes for this record ^ user can have many different login methods, this is for future proofing at the moment email and password is the only method
+  projects      Project[]      // one sponsor can have many project proposals
+  showcasePosts ShowcasePost[]  //one convener can have many showcase posts 
 
-  @@unique([email])
-  @@map("user")
+  @@unique([email])  //every user mus have a unique email
+  @@map("user") //will be called by this name, not the model name at the top
 }
 
 model Session {
@@ -60,12 +64,14 @@ model Session {
   ipAddress String?
   userAgent String?
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade) //links userID to User.id > makes sure when a user is deleted their sessions are deleted too
 
-  @@unique([token])
+
+  @@unique([token])  //every token is unique
   @@map("session")
 }
 
+//the account model is for future proofing also, every user gets an account row per login method i.e. google, github, apple account etc. (which we haven't implemented)
 model Account {
   id                    String    @id
   accountId             String
@@ -85,6 +91,7 @@ model Account {
   @@map("account")
 }
 
+//for email verification, stores the token details to compare against the link the user clicks
 model Verification {
   id         String    @id
   identifier String
@@ -96,82 +103,109 @@ model Verification {
   @@map("verification")
 }
 
+// ----------- App models (EOI forms, Posts) 
 
-
-
-
-
-// App models (EOI forms, Posts) 
-
-model SponsorEOIForm {
-  FormId            String    @id @unique @default(cuid())
-  DateCreated       DateTime? @default(now())
-  FirstName         String
-  LastName          String
-  Email             String
-  PhoneNo           String?
-  ProfessionalTitle String
-  ExperienceSummary String
-  Approved          Boolean   @default(false)
+model EOIForm { //this form is for sponsors and mentors, they can choose their required role when filling it out
+  id           String   @id @default(cuid())
+  role         Role                          
+  name         String
+  email        String
+  organisation String?             //optional as mentors don't really need to enter that information, for future iterations will make seperate forms
+  experience   String
+  status       Status   @default(PENDING)
+  createdAt    DateTime @default(now())
 }
+
+model Project { //this form is for project proposals from sponsors
+  id          String   @id @default(cuid())
+  title       String
+  summary     String
+  description String
+  scope       String
+  skills      String
+  status      Status   @default(PENDING)     // APPROVED = shown on /projects
+  sponsorId   String
+  sponsor     User     @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+}
+
+model ShowcasePost {
+  id        String   @id @default(cuid())
+  title     String
+  semcompleted   String
+  yearcompleted  String
+  sponsor   String
+  organisation  String?
+  student1  String
+  student2  String?
+  student3  String?
+  student4  String?
+  body      String         //string explaining the project
+  authorId  String        //doesn't need to be included in the post
+  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+
+
+
+
+
 
 // Mentor EOI schema for form
-
-model MentorEOIForm {
-  FormId            String    @id @unique @default(cuid())
-  DateCreated       DateTime? @default(now())
-  FirstName         String
-  LastName          String
-  Email             String
-  PhoneNo           String?
-  ProfessionalTitle String
-  ExperienceSummary String
-  Approved          Boolean   @default(false)
-}
+// model MentorEOIForm {
+//   FormId            String    @id @unique @default(cuid())
+//   DateCreated       DateTime? @default(now())
+//   FirstName         String
+//   LastName          String
+//   Email             String
+//   PhoneNo           String?
+//   ProfessionalTitle String
+//   ExperienceSummary String
+//   Approved          Boolean   @default(false)
+// }
 
 // Sponsor project proposal form
+// model ProjectProposalForm {
+//   FormId         String    @id @unique @default(cuid())
+//   UserName       String //we'll need to grab this field from the signed in user data, we'll make it the user email
+//   CreationDate   DateTime? @default(now())
+//   ProposalTitle  String
+//   Sponsor        String
+//   SponsorCompany String?
+//   Description    String
+//   Scope          String
+//   SkillsRequired String
+//   Approved          Boolean   @default(false)
+// }
 
-model ProjectProposalForm {
-  FormId         String    @id @unique @default(cuid())
-  UserName       String //we'll need to grab this field from the signed in user data, we'll make it the user email
-  CreationDate   DateTime? @default(now())
-  ProposalTitle  String
-  Sponsor        String
-  SponsorCompany String?
-  Description    String
-  Scope          String
-  SkillsRequired String
-  Approved          Boolean   @default(false)
-}
 
 // Convener available project post > takes sponsor proposal and fills some details
 
 // Convener showcase post 
-
-model ShowcasePost {
-  ShowcasePostId  String  @id @unique @default(cuid())
-  SemesterAndYear String
-  Description     String
-  SponsorName     String
-  SponsorCompany  String?
-  StudentName1    String?
-  StudentName2    String?
-  StudentName3    String?
-  StudentName4    String?
-}
+// model ShowcasePost {
+//   ShowcasePostId  String  @id @unique @default(cuid())
+//   SemesterAndYear String
+//   Description     String
+//   SponsorName     String
+//   SponsorCompany  String?
+//   StudentName1    String?
+//   StudentName2    String?
+//   StudentName3    String?
+//   StudentName4    String?
+// }
 
 //Project post
-
-model ProjectPost {
-  id              String   @id @unique @default(cuid())
-  ProjectTitle    String
-  Sponsor         String
-  SponsorCompany  String?
-  Description     String
-  Scope           String
-  SkillsRequired  String
-  DataPosted      DateTime @default(now())
-  SemesterOffered String
-  YearOffered     String
-}
+// model ProjectPost {
+//   id              String   @id @unique @default(cuid())
+//   ProjectTitle    String
+//   Sponsor         String
+//   SponsorCompany  String?
+//   Description     String
+//   Scope           String
+//   SkillsRequired  String
+//   DataPosted      DateTime @default(now())
+//   SemesterOffered String
+//   YearOffered     String
+// }
 
