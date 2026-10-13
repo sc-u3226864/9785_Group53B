@@ -37,13 +37,14 @@ enum Status {     //status of EOI submissions
 // --------- Better Auth user and session models
 
 model User {
-  id            String    @id
+  id            String    @id   @default(cuid())
   name          String
   email         String
   emailVerified Boolean   @default(false) //user needs to be verify
   image         String?
   role          Role?          //role will be applied by convener when the EOI is approved
   organisation  String? 
+  experience    String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt   
   sessions      Session[]      // this is a relation field which is a virtual so it won't show on the actual db schema. the [] means this is a one to many record and users can have multiple sessions running at once
@@ -119,7 +120,6 @@ model EOIForm { //this form is for sponsors and mentors, they can choose their r
 model Project { //this form is for project proposals from sponsors
   id          String   @id @default(cuid())
   title       String
-  summary     String
   description String
   scope       String
   skills      String
@@ -135,12 +135,13 @@ model ShowcasePost {
   semcompleted   String
   yearcompleted  String
   sponsor   String
+  mentor    String
   organisation  String?
   student1  String
   student2  String?
   student3  String?
   student4  String?
-  body      String         //string explaining the project
+  description      String         //string explaining the project
   authorId  String        //doesn't need to be included in the post
   author    User     @relation(fields: [authorId], references: [id])
   createdAt DateTime @default(now())
