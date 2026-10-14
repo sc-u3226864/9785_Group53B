@@ -15,7 +15,7 @@ const setPasswordUrl = `${process.env.BETTER_AUTH_URL}/set-password`; //password
 const text = (max: number) => z.string().trim().min(1).max(max);
 
 // ---- authentication actions
-export async function Login(formData: FormData) { //login server action
+export async function login(formData: FormData) { //login server action
     let role: string | undefined;
     try {  //validate the email and password with better_auth api if invalid it will throw an error
         const result = await auth.api.signInEmail({
@@ -25,9 +25,10 @@ export async function Login(formData: FormData) { //login server action
     } catch { //if login fails redirect to login page with error message
         redirect("/login?error=1"); 
     }
+    redirect("/")
 }
 
-export async function signOut() {
+export async function logout() {
   await auth.api.signOut({ headers: await headers() }); //https://better-auth.com/docs/basic-usage#signout
   redirect("/");
 }
@@ -60,6 +61,7 @@ export async function submitEOI(formData: FormData) {
             //TODO: add phone number
             organisation: z.string().trim().max(100).optional(),
             experience: z.string().trim().max(1000),
+            phone: z.string().trim().max(20).optional(),
         })
         .parse(Object.fromEntries(formData)); //validate the form data with zod schema, if invalid it will throw an error
     await prisma.eOIForm.create({ data }); //save the form data to the database
