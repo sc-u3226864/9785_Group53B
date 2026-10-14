@@ -15,6 +15,9 @@ const NAV_BAR_ITEMS: NavItem[] = [
     {label: 'Sponsors', href: '/sponsors'},
     {label: 'Projects', href: '/projects'},
     {label: 'Showcase', href: '/showcase'},
+    {label: 'Dashboard', href: '/dashboard'},
+    {label: 'EOI', href: '/eoi'},
+    {label: 'Login', href: '/login'}
 ]
 
 //matches the highlighted page on the navbar to url path, why: all pages start with '/' so it checks for an exact match so if other 
@@ -60,6 +63,7 @@ export default function Navbar() {
                   {item.label}
                 </Link>
               </li>
+              
             )
           })}
         </ul>
