@@ -1,15 +1,24 @@
-import SponsorExpressInterest from "@/app/components/SponsorEOISubmission"
+// TO-DO make a sponsor showcase
 
+import prisma from "../lib/prisma"
 
-export default function SponsorPage() {
+export default async function SponsorShowcase() {
+    const sponsors = await prisma.user.findMany({
+    where: { role: "SPONSOR" },
+  });
+
   return (
-    <>
-    <h1 className="title-heading text-2xl font-bold">Sponsors</h1>
-    <div className="page-content-box">
-      <SponsorExpressInterest />
-    </div>
-    </>
-  );
+    <main>
+        <h1>Sponsor Showcase</h1>
+        {sponsors.map((p) => (
+        <article key={p.id}>
+          <h2>{p.name}</h2>
+          <p>Email: {p.email}</p>
+          <p>Organisation: {p.organisation}</p>
+          <p>Experience: {p.experience}</p>
+          <p>{p.phone}</p>
+        </article>
+      ))}
+    </main>
+  )
 }
-
-// TO-DO: make a part restricted to sponsors signed in only, so that they can access the project proposal form
