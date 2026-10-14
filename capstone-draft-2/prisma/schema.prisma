@@ -41,6 +41,7 @@ model User {
   name          String
   email         String
   emailVerified Boolean   @default(false) //user needs to be verify
+  phone         String?
   image         String?
   role          Role?          //role will be applied by convener when the EOI is approved
   organisation  String? 
@@ -111,6 +112,7 @@ model EOIForm { //this form is for sponsors and mentors, they can choose their r
   role         Role                          
   name         String
   email        String
+  phone        String?
   organisation String?             //optional as mentors don't really need to enter that information, for future iterations will make seperate forms
   experience   String
   status       Status   @default(PENDING)
