@@ -5,7 +5,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";  //https://nextjs.org/docs/app/api-reference/functions/revalidatePath#usage after a server action which changes data this will be used to revalidate the page
-import { z } from "zod";  //input validation library for forms https://zod.dev/
+import { string, z } from "zod";  //input validation library for forms https://zod.dev/
 import { auth } from "../lib/auth";
 import prisma from "../lib/prisma";
 import { requireRole } from "../lib/session";
@@ -123,7 +123,7 @@ export async function createShowcasePost(formData: FormData) { //create showcase
       student1: text(100),
       student2: text(100).optional(),
       student3: text(100).optional(),
-      student4: text(100).optional(),
+      student4: z.string().max(20).optional(),
       description: z.string().trim().min(1).max(5000),
     }).parse(Object.fromEntries(formData));
   await prisma.showcasePost.create({ data: { ...data, authorId: session.user.id } }); // author from session

@@ -17,7 +17,7 @@ export default async function ShowcasePage() {
             <option value="Semester 1">Semester 1</option>
             <option value="Semester 2">Semester 2</option>
           </select>
-          <select id="completed-year" name="completed-year">
+          <select id="completed-year" name="yearcompleted">
             {years.map((year) => (
               <option key={year} value={year}>
                 {year}
@@ -38,6 +38,15 @@ export default async function ShowcasePage() {
       {posts.map((post) => (
         <article key={post.id}>
           <h2>{post.title}</h2>
+          <p>{post.semcompleted}</p>
+          <p>{post.yearcompleted}</p>
+          <p>{post.mentor}</p>
+          <p>{post.sponsor}</p>
+          <p>{post.organisation}</p>
+          <p>{post.student1}</p>
+          <p>{post.student2}</p>
+          <p>{post.student3}</p>
+          <p>{post.student4}</p>
           <p>{post.description}</p>
         </article>
       ))}
