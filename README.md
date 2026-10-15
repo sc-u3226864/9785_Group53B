@@ -25,7 +25,7 @@ These roles may shift as expectations change and blockers arise. Our goal is to 
 |---|---|---|---|
 | Danica: **Dani-hub433** | UX/Design |  UC theming, Poster Design, Site Design | Component design and scaffolding, styling, wireframes, accessibility checks (WCAG table), poster and slide design |
 | Lachlan: **shlooop** | Hosting & Testing | Hosting (cloud/Docker/AWS), CI, Test case generation, debugging | hosting investigation, app integration, final QA and debugging, test case generation, CI pipeline setup|
-| Laiba: **ahmedlaiba6** | Database & Infra | Database schema, CI, Test case generation, debugging | Schema design, system architecture, data flow diagram, ERD, final QA and debugging, test case generation |
+| Laiba: **ahmedlaiba6** | Database Infra & Testing | Database schema, CI, Test case generation, debugging | Schema design, system architecture, data flow diagram, ERD, final QA and debugging, test case generation |
 | Sophia: **sc-u3226864** & **sophiaaaaac** | Comms & Full-Stack Development | Stakeholder comms, GitHub hygiene, app logic, auth, roles & permissions, automated emails, EOI workflows, implement frontend design |  charter, project proposal, meeting planner, agendas, boilerplate endpoints, auth, roles, data flows, automation and application logic setup, implement frontend designs  |
 
 Responsibilities are defined above, but we recognise everyone has different schedules and occasional extenuating circumstances. If something falls behind, we'll hold each other accountable and redistribute work rather than let it stall. We aim for fairness, but ultimately we'll be satisfied as long as we're happy with the result and everyone has tried their best.
