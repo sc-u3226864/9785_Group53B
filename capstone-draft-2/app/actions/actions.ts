@@ -5,14 +5,21 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";  //https://nextjs.org/docs/app/api-reference/functions/revalidatePath#usage after a server action which changes data this will be used to revalidate the page
-import { string, z } from "zod";  //input validation library for forms https://zod.dev/
+import { z } from "zod";  //input validation library for forms https://zod.dev/
 import { auth } from "../lib/auth";
 import prisma from "../lib/prisma";
 import { requireRole } from "../lib/session";
 
+import { writeFile, mkdir } from "fs/promises";
+import path from "path";
+import crypto from "crypto";
+
 
 const setPasswordUrl = `${process.env.BETTER_AUTH_URL}/set-password`; //password reset url set in .env file
 const text = (max: number) => z.string().trim().min(1).max(max);
+
+const DEFAULT_IMAGE = "/default.png";
+const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
 
 // ---- authentication actions
 export async function login(formData: FormData) { //login server action
@@ -144,4 +151,70 @@ export async function createProject(formData: FormData) { //for sponsors to crea
     .parse(Object.fromEntries(formData));
   await prisma.project.create({ data: { ...data, sponsorId: session.user.id } }); // status defaults to PENDING
   redirect("/projects?submitted=1");
+}
+
+// ------ mentor page actions
+
+async function readForm(formData: FormData) {
+  const name = String(formData.get("name") ?? "").trim(); //grabs the form entries and clears trailing whitespace, if empty adds empty string
+  const email = String(formData.get("email") ?? "").trim(); 
+  const phone = String(formData.get("phone") ?? "").trim(); 
+  const experience = String(formData.get("experience") ?? "").trim();
+
+  if (!name) throw new Error("Name is required.");  //manual error handling if no name or experience is submitted
+  if (!experience) throw new Error("Experience is required.");
+
+  const file = formData.get("image");
+  const existing = String(formData.get("existingImageURL") ?? ""); //carries the image that the post already has, so when editing it doesn't wipe the old one
+  const imageURL =
+    file instanceof File && file.size > 0 //the imageURL is either the new image that was uploaded, or the existing image if no new image was uploaded, or the default image if no image was uploaded and there is no existing image
+      ? await saveImage(file)
+      : existing || DEFAULT_IMAGE;
+
+  return { //returns the form data as an object for prisma, null for emty values so there's no error
+    name,
+    experience,
+    email: email || null,
+    phone: phone || null,
+    imageURL,
+  };
+}
+
+export async function createPost(formData: FormData) { //convener create form
+  await requireRole("CONVENER");
+  const data = await readForm(formData);   //reads the form data and returns an object for prisma
+  await prisma.mentorPost.create({ data });
+  revalidatePath("/mentors");  //revalidates the mentors page so the new post is displayed
+  redirect("/mentors");
+}
+
+export async function updatePost(formData: FormData) { //convener edit form
+  await requireRole("CONVENER");
+  const id = String(formData.get("id") ?? ""); //grabs the id of the post to be updated
+  const data = await readForm(formData);  //reads the form data and returns an object for prisma at that id
+  await prisma.mentorPost.update({ where: { id }, data });
+  revalidatePath("/mentors");
+  redirect("/mentors");
+}
+
+export async function deletePost(formData: FormData) { //convener delete form
+  await requireRole("CONVENER");
+  const id = String(formData.get("id") ?? "");
+  await prisma.mentorPost.delete({ where: { id } });
+  revalidatePath("/mentors");
+}
+
+async function saveImage(file: File): Promise<string> {
+  if (!file.type.startsWith("image/")) throw new Error("File must be an image"); //check file type and size
+  if (file.size > MAX_SIZE) throw new Error("Image too large (max 5 MB)");
+
+  const ext = { "image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp" }[file.type]; //must be one of these three types, if not throw error
+  if (!ext) throw new Error("Unsupported image type");
+  const filename = `${crypto.randomUUID()}${ext}`; //generate a random filename for the image to avoid conflicts
+  const dir = path.join(process.cwd(), "public", "uploads"); //saves image at public/uploads
+
+  await mkdir(dir, { recursive: true }); //create the uploads directory if it doesn't exist, no error if it does exist
+  await writeFile(path.join(dir, filename), Buffer.from(await file.arrayBuffer())); //write the file to the uploads directory, convert the file to a buffer from an array buffer, https://medium.com/@devcodehunter/mastering-buffers-in-node-js-a-complete-guide-with-examples-e8e6f8e07408
+
+  return `/uploads/${filename}`;
 }
