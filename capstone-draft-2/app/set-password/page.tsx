@@ -12,7 +12,7 @@ export default async function SetPasswordPage({
   return (
     <main>
       <h1>Set your password</h1>
-      {error && <p>Couldn't set your password. The link may have expired; request a new one on the sign-in page.</p>} {/*if error is present show this message */}
+      {error && <p> Couldn&apos;t set your password. The link may have expired; request a new one on the sign-in page.</p>} {/*if error is present show this message */}
       <form action={setPassword}>
         <input type="hidden" name="token" value={token} />
         <input name="password" type="password" minLength={8} placeholder="New password" required />
@@ -20,4 +20,5 @@ export default async function SetPasswordPage({
       </form>
     </main>
   );
+  
 }
