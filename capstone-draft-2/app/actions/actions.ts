@@ -9,7 +9,6 @@ import { z } from "zod";  //input validation library for forms https://zod.dev/
 import { auth } from "../lib/auth";
 import prisma from "../lib/prisma";
 import { requireRole } from "../lib/session";
-
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import crypto from "crypto";
@@ -32,7 +31,7 @@ export async function login(formData: FormData) { //login server action
     } catch { //if login fails redirect to login page with error message
         redirect("/login?error=1"); 
     }
-    redirect("/")
+    redirect(role === "CONVENER" ? "/dashboard" : "/")
 }
 
 export async function logout() {
@@ -54,7 +53,7 @@ export async function setPassword(formData: FormData) { //https://better-auth.co
   } catch {
     redirect(`/set-password?token=${encodeURIComponent(token)}&error=1`); //if token is invalid or expired sends back to setpassword page
   }
-  redirect("/sign-in");
+  redirect("/login");
 }
 
 // ----- EOI form actions
@@ -153,9 +152,9 @@ export async function createProject(formData: FormData) { //for sponsors to crea
   redirect("/projects?submitted=1");
 }
 
-// ------ mentor page actions
+// ------ mentor post actions
 
-async function readForm(formData: FormData) {
+async function readMentorForm(formData: FormData) {
   const name = String(formData.get("name") ?? "").trim(); //grabs the form entries and clears trailing whitespace, if empty adds empty string
   const email = String(formData.get("email") ?? "").trim(); 
   const phone = String(formData.get("phone") ?? "").trim(); 
@@ -180,24 +179,24 @@ async function readForm(formData: FormData) {
   };
 }
 
-export async function createPost(formData: FormData) { //convener create form
+export async function createMentorPost(formData: FormData) { //convener create form
   await requireRole("CONVENER");
-  const data = await readForm(formData);   //reads the form data and returns an object for prisma
+  const data = await readMentorForm(formData);   //reads the form data and returns an object for prisma
   await prisma.mentorPost.create({ data });
   revalidatePath("/mentors");  //revalidates the mentors page so the new post is displayed
   redirect("/mentors");
 }
 
-export async function updatePost(formData: FormData) { //convener edit form
+export async function updateMentorPost(formData: FormData) { //convener edit form
   await requireRole("CONVENER");
   const id = String(formData.get("id") ?? ""); //grabs the id of the post to be updated
-  const data = await readForm(formData);  //reads the form data and returns an object for prisma at that id
+  const data = await readMentorForm(formData);  //reads the form data and returns an object for prisma at that id
   await prisma.mentorPost.update({ where: { id }, data });
   revalidatePath("/mentors");
   redirect("/mentors");
 }
 
-export async function deletePost(formData: FormData) { //convener delete form
+export async function deleteMentorPost(formData: FormData) { //convener delete form
   await requireRole("CONVENER");
   const id = String(formData.get("id") ?? "");
   await prisma.mentorPost.delete({ where: { id } });
@@ -218,3 +217,60 @@ async function saveImage(file: File): Promise<string> {
 
   return `/uploads/${filename}`;
 }
+
+
+// ----- Sponsor post actions
+
+async function readSponsorForm(formData: FormData) {
+  const name = String(formData.get("name") ?? "").trim(); //grabs the form entries and clears trailing whitespace, if empty adds empty string
+  const email = String(formData.get("email") ?? "").trim(); 
+  const phone = String(formData.get("phone") ?? "").trim(); 
+  const organisation = String(formData.get("organisation") ?? "").trim();
+  const experience = String(formData.get("experience") ?? "").trim();
+
+  if (!name) throw new Error("Name is required.");  //manual error handling if no name or experience is submitted
+  if (!experience) throw new Error("Experience is required.");
+
+  const file = formData.get("image");
+  const existing = String(formData.get("existingImageURL") ?? ""); //carries the image that the post already has, so when editing it doesn't wipe the old one
+  const imageURL =
+    file instanceof File && file.size > 0 //the imageURL is either the new image that was uploaded, or the existing image if no new image was uploaded, or the default image if no image was uploaded and there is no existing image
+      ? await saveImage(file)
+      : existing || DEFAULT_IMAGE;
+
+  return { //returns the form data as an object for prisma, null for emty values so there's no error
+    name,
+    experience,
+    email: email || null,
+    phone: phone || null,
+    organisation: organisation,
+    imageURL,
+  };
+}
+
+export async function createSponsorPost(formData: FormData) { //convener create form
+  await requireRole("CONVENER");
+  const data = await readSponsorForm(formData);   //reads the form data and returns an object for prisma
+  await prisma.sponsorPost.create({ data });
+  revalidatePath("/sponsors");  //revalidates the sponsors page so the new post is displayed
+  redirect("/sponsors");
+}
+
+export async function updateSponsorPost(formData: FormData) { //convener edit form
+  await requireRole("CONVENER");
+  const id = String(formData.get("id") ?? ""); //grabs the id of the post to be updated
+  const data = await readSponsorForm(formData);  //reads the form data and returns an object for prisma at that id
+  await prisma.sponsorPost.update({ where: { id }, data });
+  revalidatePath("/sponsors");
+  redirect("/sponsors");
+}
+
+export async function deleteSponsorPost(formData: FormData) { //convener delete form
+  await requireRole("CONVENER");
+  const id = String(formData.get("id") ?? "");
+  await prisma.sponsorPost.delete({ where: { id } });
+  revalidatePath("/sponsors");
+}
+
+
+
