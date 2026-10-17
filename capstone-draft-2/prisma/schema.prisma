@@ -158,7 +158,15 @@ model MentorPost {
   imageURL     String  @default("/images/pfp_default.jpg")
 }
 
-
+model SponsorPost {
+  id        String   @id @default(cuid())
+  name         String
+  email        String?
+  phone        String?
+  organisation String
+  experience   String
+  imageURL     String  @default("/images/pfp_default.jpg")
+}
 
 
 
