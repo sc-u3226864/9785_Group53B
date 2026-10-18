@@ -47,29 +47,61 @@ We use a combination of Microsoft and GitHub tools to track progress, communicat
 ## Relationships
 We track deadlines through our GitHub project and weekly scrum meetings, addressing blockers as they arise and reallocating tasks where needed. For conflict resolution, we prioritise clear communication, discussion, compromise, and voting to work through disagreements. If conflict persists despite these efforts, we'll escalate it to the lecturer for intervention.
 
-## Getting Started
-Prerequisites
-- Node.js v24.19.0(LTS)
-- Docker Desktop & Docker CLI v29.8.0 
-- WSL2 if on windows
-- Git v2.55.0
+# Getting Started
+## Prerequisites
 
-### Common Issues
-install version not showing when running {technology} -v (powershell): VS Code needed a restart after Node.js, Docker and Git were installed
+1. Install [Visual Studio Code](https://code.visualstudio.com/download) and [Git](https://git-scm.com/downloads).
 
-### Steps
-1. after installing all prerequisites clone to your IDE (we have agreed on VSCode)
-2. create a new .env file to store your postgres credentials:
-```powershell
-Copy-Item .env.example .env
-```
-3. input your own username and password and change the DATABASE_URL to match
-4. check you can start the container
-```powershell
-cd my-capstone
-docker compose up -d
-```
+1. In VS Code, select **Terminal** > **New Terminal**, then check that Git is available:
 
+    ```bash
+    git --version
+    ```
+
+    You should see a Git version number. If the command isn't found, restart VS Code after installing Git. If it still fails, see [source control troubleshooting](/docs/sourcecontrol/troubleshooting.md).
+
+1. Configure the author name and email for your commits. Replace the placeholders with your details:
+
+    ```bash
+    git config --global user.name "<your-name>"
+    git config --global user.email "<your-email>"
+    ```
+
+    Skip this step if your identity is already configured. These values identify the author in Git history, not your sign-in credentials. The `--global` option sets the default for your repositories. If you publish commits, their author information is also shared.
+
+<a name="option-b-initialize-a-repository-in-a-local-folder"></a>
+(source - https://code.visualstudio.com/docs/sourcecontrol/quickstart)
+
+## Step 1: Cloning the Repo
+1. Go to Source Control in the left panel
+2. Click 'Clone Repository'
+3. Paste in repository URL
+![Screenshot showing the Clone Repository prompt in VS Code.](https://code.visualstudio.com/assets/docs/sourcecontrol/repos-remotes/github-clone.png)
+4. You'll be prompted to save your project - SAVE IT LOCALLY, saving it in the cloud causes sync issues
+
+## Step 2: Configuring your .env file
+1. In `/9785_Group53B/capstone-draft-2/.env.example` copy the file and paste it into the repo
+<img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/3cdd85d1-1574-4649-9e80-c4252e0dd74e" />
+
+2. rename the file to '.env' so .gitignore picks it up - this file should NEVER be committed publicly
+3. DATABASE_URL: I have sent you all a link to the Prisma Console to your UC emails. Go to Databases > 'capstone' > Dashboard > click the Connect button > Quick Connect > copy the URL and paste into the field in you .env file
+<img width="600" height="400" alt="image" src="https://github.com/user-attachments/assets/17bc06d2-c2b3-48e7-bafd-c7e34cc0df46" />
+
+
+4. BETTER_AUTH_URL & BETTER_AUTH_SECRET: there are instructions on setting this up in the .env file - *hint:* https://localhost.co/3000
+5. SEED_CONVENER_EMAIL: when you run the seed file in future steps this is the email which will be associated with the initial convener role and you'll have to set a password for
+
+## Step 3: Running the assignment
+
+
+1.  in your terminal make sure your in the right directory - `cd capstone-draft-2`
+2. make sure you have node installed
+    * check version `node -v` install v24.22.0
+    * if you dont't have it follow the instructions here: [https://nodejs.org/en/download](https://nodejs.org/en/download) 
+3. prisma setup, run `npm install prisma --save-dev`. After prisma is installed, run `npx prisma migrate dev` it should be already synced, but it's good practice 
+4. generate the prisma client `npx prisma generate` 
+5. Run the seed command to setup the Convener user: `npx prisma db seed` . After this you'll get a link in your terminal to setup a new password, **save this link for later** 
+6. Lastly run `npm run dev` and open the local link, open the saved link from step 5 and setup a new password and save
 
 Note:
 Prisma ORM is used to help manage the database, for help with commands and data management see
