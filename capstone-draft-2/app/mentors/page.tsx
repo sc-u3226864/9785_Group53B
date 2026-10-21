@@ -13,7 +13,7 @@ export default async function MentorsPage() {
   
 
   return (
-    <main style={{ maxWidth: 700, margin: "0 auto", padding: 20 }}>
+    <main>
       <h1>Mentors</h1>
 
       {canManage && <Link href="/mentors/new">Create Post</Link>} {/*convener post button*/}

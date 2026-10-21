@@ -19,9 +19,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en">
-      <body className={`${lato.variable} h-full antialiased min-h-full flex flex-col`}>
-        <div className = "bg-(--uc-dark-background)">
-        <Navbar />
+      <body className={`${lato.variable} flex flex-col min-h-dvh`}>
+        <div className = "z-10 shadow-md">
+          <Navbar />
         </div>
         {children}
         </body>

@@ -1,23 +1,5 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --uc-dark-background: #404d61;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
@@ -29,7 +11,17 @@ body {
 h1 {
   text-align: center;
   font-size: xx-large;
+  font-weight: bold;
   font-family: 'Lato';
+  padding: 10px 10px 0px 10px;
+}
+
+h2 {
+  text-align: center;
+  font-size: medium;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Lato';
+  padding: 5px 50px 10px 50px;
 }
 
 .link-buttons {
@@ -38,7 +30,8 @@ h1 {
   color: #ffffff;
   font-weight: bold;
   border-radius: 3px;
-  width: 100px;
+  width: 200px;
+  text-align: center;
 }
 
 .link-buttons:hover {
@@ -48,22 +41,43 @@ h1 {
 
 .home-quick-links {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: space-evenly;
   gap: 10px;
+  padding-bottom: 20px;
+  background-color: #d3eef4;
 }
 
 .explore-project-cta {
-  display: flex;
-  flex-direction: column ;
   background-color: #009abc;
-  padding: 80px 50px 80px 50px;
+  padding: 40px 50px 40px 50px;
   width: 100%;
   height: 30%;
   text-align: left;
   row-gap: 20px;
 }
 
+main {
+  width: min(calc(100% - 2rem), 60rem);
+  margin-inline: auto;
+  flex: 1;
+  background-color: #d3eef4;
+}
+
 p:empty {
   display: none;
 }
+.nav-bar-select {
+  padding: 10px;
+}
+
+.nav-bar-select:hover {
+  background-color: #5db6c8;
+  padding: 10px;
+}
+
+.nav-bar-select:active {
+  background-color: #d3eef4;
+  padding: 10px;
+}
+
