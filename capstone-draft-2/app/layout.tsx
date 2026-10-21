@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Lato } from "next/font/google"; //https://nextjs.org/docs/app/getting-started/fonts
 import "./globals.css";
-import Navbar from "./components/Navbar"; //import navbar
+import {Navbar} from "./components/Navbar"; //import navbar
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const lato = Lato({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["100", "300", "400", "700", "900"],
+  style: ["normal", "italic"],
+  variable: "--font-lato",
 });
 
 export const metadata: Metadata = {
@@ -21,10 +18,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">
+      lang="en">
+      <body className={`${lato.variable} h-full antialiased min-h-full flex flex-col`}>
         <div className = "bg-(--uc-dark-background)">
         <Navbar />
         </div>

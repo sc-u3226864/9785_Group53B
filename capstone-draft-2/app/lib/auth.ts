@@ -24,5 +24,13 @@ export const auth = betterAuth({
     
     }
   },
+
+  session: {  //using the session cookie so page doesn't have to query the database on every getSession() request when checking role, only every 5 minutes
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60, // re-check the database every 5 minutes
+    },
+  },
+
   plugins: [nextCookies()],    //https://better-auth.com/docs/integrations/next#server-action-cookies , so the browser can store the session
 });

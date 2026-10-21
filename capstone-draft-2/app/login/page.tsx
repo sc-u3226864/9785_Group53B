@@ -1,6 +1,6 @@
 // https://nextjs.org/docs/app/api-reference/file-conventions/page#displaying-content-based-on-params
 
-import { login, sendPasswordLink, logout } from "../actions/actions";
+import { login, sendPasswordLink} from "../actions/actions";
 
 export default async function SignInPage({
   searchParams,
@@ -24,7 +24,6 @@ export default async function SignInPage({
         <input name="email" type="email" placeholder="Email" required />
         <button>Send me a new link</button>
       </form>
-      <button onClick={logout}>Logout</button>
     </main>
   );
 }

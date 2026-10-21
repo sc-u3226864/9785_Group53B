@@ -1,26 +1,23 @@
-// ALL of the server action are in this file will seperate later
-
 "use server";
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";  //https://nextjs.org/docs/app/api-reference/functions/revalidatePath#usage after a server action which changes data this will be used to revalidate the page
 import { z } from "zod";  //input validation library for forms https://zod.dev/
-import { auth } from "../lib/auth";
+import { auth } from "../lib/auth"; 
 import prisma from "../lib/prisma";
 import { requireRole } from "../lib/session";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import crypto from "crypto";
 
-
-const setPasswordUrl = `${process.env.BETTER_AUTH_URL}/set-password`; //password reset url set in .env file
+// ------ CONSTANTS
+const setPasswordUrl = `${process.env.BETTER_AUTH_URL}/set-password`; //password reset url set in .env file (BETTER_AUTH_URL)
+const defaultImage = "images/pfp_default.jpg"; //used for the default profile pics for sponsor and mentor posts
+const maxSize = 5 * 1024 * 1024; // 5 MB
 const text = (max: number) => z.string().trim().min(1).max(max);
 
-const DEFAULT_IMAGE = "/default.png";
-const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
-
-// ---- authentication actions
+// ------ AUTHENTICATION ACTIONS
 export async function login(formData: FormData) { //login server action
     let role: string | undefined;
     try {  //validate the email and password with better_auth api if invalid it will throw an error
@@ -43,7 +40,7 @@ export async function sendPasswordLink(formData: FormData) {
   await auth.api.requestPasswordReset({            //doesn't send email just retunrs url for testing http://better-auth.com/docs/authentication/email-password#request-password-reset
     body: { email: String(formData.get("email")), redirectTo: setPasswordUrl },
   });
-  redirect("/sign-in?linkSent=1");
+  redirect("/login?linkSent=1");
 }
 
 export async function setPassword(formData: FormData) { //https://better-auth.com/docs/authentication/email-password#request-password-reset
@@ -56,25 +53,26 @@ export async function setPassword(formData: FormData) { //https://better-auth.co
   redirect("/login");
 }
 
-// ----- EOI form actions
+// ------ EOI FORM ACTIONS
 
 export async function submitEOI(formData: FormData) {
     const data = z
         .object({
             role: z.enum(["SPONSOR", "MENTOR"]),
-            name: z.string().trim().min(1).max(100), //TODO: change schema name to firstName and lastName
+            name: text(100), //TODO: change schema name to firstName and lastName
             email: z.string().toLowerCase().trim().max(100).pipe(z.email()),
-            //TODO: add phone number
-            organisation: z.string().trim().max(100).optional(),
-            experience: z.string().trim().max(1000),
-            phone: z.string().trim().max(20).optional(),
+            organisation: text(100).optional(),
+            experience: text(5000),
+            phone: text(20).optional(),
         })
         .parse(Object.fromEntries(formData)); //validate the form data with zod schema, if invalid it will throw an error
     await prisma.eOIForm.create({ data }); //save the form data to the database
     redirect("/eoi?sent=1"); //redirect to eoi submitted page
 }
 
-// ----- Convener actions
+// TO-DO: add action so a CV can be uploaded and saved to the db + convener can download it from the
+
+// ------ CONVENER ACTIONS
 export async function approveEoi(formData: FormData) {
   await requireRole("CONVENER");                   //checks the logged in user is the convener
   const eoi = await prisma.eOIForm.findUniqueOrThrow({
@@ -91,6 +89,7 @@ export async function approveEoi(formData: FormData) {
         role: eoi.role === "SPONSOR" ? "SPONSOR" : "MENTOR", // can never produce CONVENER
         organisation: eoi.organisation,
         experience: eoi.experience,
+        phone: eoi.phone,
       },
     }),
   ]);
@@ -129,14 +128,14 @@ export async function createShowcasePost(formData: FormData) { //create showcase
       student1: text(100),
       student2: text(100).optional(),
       student3: text(100).optional(),
-      student4: z.string().max(20).optional(),
-      description: z.string().trim().min(1).max(5000),
+      student4: text(20).optional(),
+      description: text(5000),
     }).parse(Object.fromEntries(formData));
   await prisma.showcasePost.create({ data: { ...data, authorId: session.user.id } }); // author from session
   revalidatePath("/showcase");
 }
 
-// ----- Sponsor actions
+// ------ SPONSOR ACTIONS
 
 export async function createProject(formData: FormData) { //for sponsors to create a project submission
   const session = await requireRole("SPONSOR");
@@ -152,7 +151,7 @@ export async function createProject(formData: FormData) { //for sponsors to crea
   redirect("/projects?submitted=1");
 }
 
-// ------ mentor post actions
+// ------ MENTOR POST ACTIONS
 
 async function readMentorForm(formData: FormData) {
   const name = String(formData.get("name") ?? "").trim(); //grabs the form entries and clears trailing whitespace, if empty adds empty string
@@ -168,7 +167,7 @@ async function readMentorForm(formData: FormData) {
   const imageURL =
     file instanceof File && file.size > 0 //the imageURL is either the new image that was uploaded, or the existing image if no new image was uploaded, or the default image if no image was uploaded and there is no existing image
       ? await saveImage(file)
-      : existing || DEFAULT_IMAGE;
+      : existing || defaultImage;
 
   return { //returns the form data as an object for prisma, null for emty values so there's no error
     name,
@@ -205,7 +204,7 @@ export async function deleteMentorPost(formData: FormData) { //convener delete f
 
 async function saveImage(file: File): Promise<string> {
   if (!file.type.startsWith("image/")) throw new Error("File must be an image"); //check file type and size
-  if (file.size > MAX_SIZE) throw new Error("Image too large (max 5 MB)");
+  if (file.size > maxSize) throw new Error("Image too large (max 5 MB)");
 
   const ext = { "image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp" }[file.type]; //must be one of these three types, if not throw error
   if (!ext) throw new Error("Unsupported image type");
@@ -219,7 +218,7 @@ async function saveImage(file: File): Promise<string> {
 }
 
 
-// ----- Sponsor post actions
+// ------ SPONSOR POST ACTIONS
 
 async function readSponsorForm(formData: FormData) {
   const name = String(formData.get("name") ?? "").trim(); //grabs the form entries and clears trailing whitespace, if empty adds empty string
@@ -236,7 +235,7 @@ async function readSponsorForm(formData: FormData) {
   const imageURL =
     file instanceof File && file.size > 0 //the imageURL is either the new image that was uploaded, or the existing image if no new image was uploaded, or the default image if no image was uploaded and there is no existing image
       ? await saveImage(file)
-      : existing || DEFAULT_IMAGE;
+      : existing || defaultImage;
 
   return { //returns the form data as an object for prisma, null for emty values so there's no error
     name,

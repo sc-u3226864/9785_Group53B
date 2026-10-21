@@ -1,5 +1,3 @@
-This iteration of the project will be from scratch and based on the setup made in my-capstone which was guided with claude
-
 # Default Next.js documentation 
 go here to see default setup (which this project is built on): https://nextjs.org/docs/app/getting-started/installation#quick-start
 
