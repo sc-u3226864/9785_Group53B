@@ -14,11 +14,11 @@ export default async function MentorsPage() {
 
   return (
     <main>
-      <h1>Mentors</h1>
+      <h1 className="text-[#006c91]">Mentors</h1>
 
-      {canManage && <Link href="/mentors/new">Create Post</Link>} {/*convener post button*/}
+      {canManage && <Link className="flex justify-center text-gray-600 hover:text-blue-300" href="/mentors/new">Create Post</Link>} {/*convener post button*/}
 
-      {posts.length === 0 && <p>No mentor posts yet.</p>} {/*if there are no posts display this message*/}
+      {posts.length === 0 && <p className="text-gray-600 text-center">No mentor posts yet.</p>} {/*if there are no posts display this message*/}
 
       {posts.map((post) => (
         <div key={post.id} style={{ border: "1px solid #ccc", padding: 12, marginTop: 12 }}>
