@@ -13,7 +13,7 @@ import crypto from "crypto";
 
 // ------ CONSTANTS
 const setPasswordUrl = `${process.env.BETTER_AUTH_URL}/set-password`; //password reset url set in .env file (BETTER_AUTH_URL)
-const defaultImage = "images/pfp_default.jpg"; //used for the default profile pics for sponsor and mentor posts
+const defaultImage = "/images/pfp_default.jpg"; //used for the default profile pics for sponsor and mentor posts
 const maxSize = 5 * 1024 * 1024; // 5 MB
 const text = (max: number) => z.string().trim().min(1).max(max);
 

@@ -22,7 +22,7 @@ export async function Navbar() {
         {isConvener && <Link className="nav-bar-select" href="/dashboard">Dashboard</Link>} {/*only show dashboard link if user is convener*/}
         <Link className="nav-bar-select" href="/eoi">EOI</Link>
         {!isLoggedIn && <Link className="nav-bar-select" href="/login">Login</Link>}
-        {isLoggedIn && <Link className="nav-bar-select" href="/" onClick={logout}>Logout</Link>}
+        {isLoggedIn && <form action={logout}><button className="nav-bar-select">Sign out</button></form>}
       </ul>
     </nav>
   );
