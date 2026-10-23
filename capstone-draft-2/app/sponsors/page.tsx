@@ -14,27 +14,32 @@ export default async function SponsorPage() {
 
   return (
     <main>
-      <h1>Sponsors</h1>
+      <h1 className="text-[#006c91]">Sponsors</h1>
 
-      {canManage && <Link href="/sponsors/new">Create Post</Link>} {/*convener post button*/}
+      {canManage && <Link className="flex justify-center text-gray-600 hover:text-blue-300" href="/sponsors/new">Create Post</Link>} {/*convener post button*/}
 
       {posts.length === 0 && <p>No sponsor posts yet.</p>} {/*if there are no posts display this message*/}
 
       {posts.map((post) => (
-        <div key={post.id} style={{ border: "1px solid #ccc", padding: 12, marginTop: 12 }}>
-          <Image src={post.imageURL} alt={post.name} width={80} height={80} />
-          <h2>{post.name}</h2>
-          <p>{post.experience}</p>
-          {post.organisation && <p>Organisation: {post.organisation}</p>}
-          {post.email && <p>Email: {post.email}</p>}
-          {post.phone && <p>Phone: {post.phone}</p>}
-
-          {canManage && (
-            <div style={{ display: "flex", gap: 12 }}>
-              <Link href={`/sponsors/${post.id}/edit`}>Edit</Link> {/*convener edit button*/}
-              <DeleteButton id={post.id} /> {/*convener delete button*/}
-            </div>
+        <div key={post.id} className="post">
+          <div className="min-w-3xs">
+            <Image src={post.imageURL} alt={post.name} width={200} height={200} className="rounded-md"/>
+            {post.organisation && <p className="mt-1"><b>Organisation:</b> {post.organisation}</p>}
+            {post.email && <p className="mt-1"><b>Email:</b> {post.email}</p>}
+            {post.phone && <p className="mt-1"><b>Phone:</b> {post.phone}</p>}
+            {canManage && (
+              <div style={{ display: "flex", gap: 12, marginTop: "1rem"}}>
+                <Link className="border-2 border-solid px-[5px] rounded-md" href={`/sponsors/${post.id}/edit`}>Edit</Link> {/*convener edit button*/}
+                <DeleteButton id={post.id} /> {/*convener delete button*/}
+              </div>
           )}
+          </div>
+          <div>
+            <h2 className="post-name">{post.name}</h2>
+            <p>{post.experience}</p>
+
+            
+          </div>
         </div>
       ))}
     </main>

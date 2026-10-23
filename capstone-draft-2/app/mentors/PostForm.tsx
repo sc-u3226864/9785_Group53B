@@ -17,6 +17,7 @@ type Props = { // what a page must pass in
 
 export default function PostForm({ action, post }: Props) { //reusable form for createPost and updatePost actions
   return (
+    <div style={{display:"flex", justifyContent:"center"}}>
     <form action={action} style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 500 }}>
       {post && <input type="hidden" name="id" value={post.id} />} {/*which post is being edited */}
       {post && <input type="hidden" name="existingImageURL" value={post.imageURL} />} {/* which image to keep if no new image is uploaded */}
@@ -26,22 +27,22 @@ export default function PostForm({ action, post }: Props) { //reusable form for 
 
       <label>
         Name *
-        <input name="name" defaultValue={post?.name} required />
+        <input className="form-input" name="name" defaultValue={post?.name} required />
       </label>
 
       <label>
         Email
-        <input name="email" type="email" defaultValue={post?.email ?? ""} />
+        <input className="form-input" name="email" type="email" defaultValue={post?.email ?? ""} />
       </label>
 
       <label>
         Phone
-        <input name="phone" defaultValue={post?.phone ?? ""} />
+        <input className="form-input" name="phone" defaultValue={post?.phone ?? ""} />
       </label>
 
       <label>
         Experience *
-        <textarea name="experience" defaultValue={post?.experience} rows={5} required />
+        <textarea className="form-input" name="experience" defaultValue={post?.experience} rows={5} required />
       </label>
 
       <label>
@@ -51,5 +52,6 @@ export default function PostForm({ action, post }: Props) { //reusable form for 
 
       <button type="submit">Save</button> {/*submit button to save the form data, when clicked it will trigger the action function passed as a prop to the PostForm component*/}
     </form>
+    </div>
   );
 }
