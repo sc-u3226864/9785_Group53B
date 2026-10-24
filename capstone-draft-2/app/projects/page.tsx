@@ -17,16 +17,16 @@ export default async function ProjectsPage({ searchParams }: { searchParams: Pro
       {submitted && <p>Thanks! Your proposal is awaiting review.</p>} {/* if the url has projects?submitted=1 then return thankyou message */}
 
       {session?.user.role === "SPONSOR" && (        // only sponsors get to see the form button
-        <details>
-          <summary>Submit project proposal</summary>
-          <form action={createProject}>
-            <input name="title" placeholder="Title" required />
-            <textarea name="description" placeholder="Description" required />
-            <textarea name="scope" placeholder="Scope" required />
-            <textarea name="skills" placeholder="Skills required" required />
-            <button>Submit for review</button>
-          </form>
-        </details>
+        <>
+        <h2>Submit project proposal</h2>
+        <form action={createProject}>
+          <input name="title" placeholder="Title" required />
+          <textarea name="description" placeholder="Description" required />
+          <textarea name="scope" placeholder="Scope" required />
+          <textarea name="skills" placeholder="Skills required" required />
+          <button>Submit for review</button>
+        </form>
+        </>
       )}
 
       {projects.map((p) => (  // display the approved projects

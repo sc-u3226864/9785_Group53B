@@ -3,7 +3,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";  //https://nextjs.org/docs/app/api-reference/functions/revalidatePath#usage after a server action which changes data this will be used to revalidate the page
-import { z } from "zod";  //input validation library for forms https://zod.dev/
+import { email, z } from "zod";  //input validation library for forms https://zod.dev/
 import { auth } from "../lib/auth"; 
 import prisma from "../lib/prisma";
 import { requireRole } from "../lib/session";
@@ -116,27 +116,68 @@ export async function reviewProject(formData: FormData) { //review project serve
   revalidatePath("/projects");
 }
 
-export async function createShowcasePost(formData: FormData) { //create showcase post server action so the convener can create a showcase post
+// ------ SHOWCASE ACTIONS
+
+async function readShowcasePost (formData: FormData) {
+  const title = String(formData.get("title") ?? "").trim(); //grabs the form entries and clears trailing whitespace, if empty adds empty string
+  const semCompleted = String(formData.get("semCompleted") ?? "").trim(); 
+  const yearCompleted = String(formData.get("yearCompleted") ?? "").trim(); 
+  const sponsor = String(formData.get("sponsor") ?? "").trim(); 
+  const mentor = String(formData.get("mentor") ?? "").trim(); 
+  const organisation = String(formData.get("organisation") ?? "").trim();
+  const student1 = String(formData.get("student1") ?? "").trim();
+  const student2 = String(formData.get("student2") ?? "").trim();
+  const student3 = String(formData.get("student3") ?? "").trim();
+  const student4 = String(formData.get("student4") ?? "").trim();
+  const description = String(formData.get("description") ?? "").trim();
+
+  if (!title) throw new Error("Title is required.");  //manual error handling if no title or description is submitted
+  if (!description) throw new Error("Description is required.");
+
+  //TODO: add image upload for showcase posts, currently just text fields
+  return { //returns the form data as an object for prisma, null for emty values so there's no error
+    title,
+    semcompleted: semCompleted,
+    yearcompleted: yearCompleted,
+    sponsor,
+    mentor,
+    organisation: organisation || null,
+    student1,
+    student2: student2 || null,
+    student3: student3 || null,
+    student4: student4 || null,
+    description,
+  };
+}
+
+export async function createShowcasePost(formData: FormData) { //convener create form
   const session = await requireRole("CONVENER");
-  const data = z.object(
-    { title: text(150), 
-      semcompleted: z.string().trim().min(1).max(10),
-      yearcompleted: z.string().trim().min(1).max(4),
-      sponsor: text(100),
-      mentor: text(100),
-      organisation: text(100),
-      student1: text(100),
-      student2: text(100).optional(),
-      student3: text(100).optional(),
-      student4: text(20).optional(),
-      description: text(5000),
-    }).parse(Object.fromEntries(formData));
-  await prisma.showcasePost.create({ data: { ...data, authorId: session.user.id } }); // author from session
+  const data = await readShowcasePost(formData);   //reads the form data and returns an object for prisma
+  await prisma.showcasePost.create({
+    data: { ...data, author: { connect: { id: session.user.id } } },
+  });
+  revalidatePath("/showcase");  //revalidates the showcase page so the new post is displayed
+  redirect("/showcase");
+}
+
+export async function updateShowcasePost(formData: FormData) { //convener edit form
+  await requireRole("CONVENER");
+  const id = String(formData.get("id") ?? ""); //grabs the id of the post to be updated
+  const data = await readShowcasePost(formData);  //reads the form data and returns an object for prisma at that id
+  await prisma.showcasePost.update({ where: { id }, data });
+  revalidatePath("/showcase");
+  redirect("/showcase");
+}
+
+export async function deleteShowcasePost(formData: FormData) { //convener delete form
+  await requireRole("CONVENER");
+  const id = String(formData.get("id") ?? "");
+  await prisma.showcasePost.delete({ where: { id } });
   revalidatePath("/showcase");
 }
 
 // ------ SPONSOR ACTIONS
-
+// TO-DO: add sponsor actions for creating, editing and deleting sponsor posts
 export async function createProject(formData: FormData) { //for sponsors to create a project submission
   const session = await requireRole("SPONSOR");
   const data = z.object(

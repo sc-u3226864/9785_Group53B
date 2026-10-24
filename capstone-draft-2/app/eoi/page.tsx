@@ -5,19 +5,21 @@ export default async function EoiPage({ searchParams }: { searchParams: Promise<
   if (sent) return <main><p>Thanks! A convener will review your expression of interest.</p></main>;
   return (
     <main>
+      <div >
       <h1>Express your interest</h1>
-      <form action={submitEOI}>
-        <select name="role" required>
-          <option value="SPONSOR">Sponsor</option>
-          <option value="MENTOR">Mentor</option>
-        </select>
-        <input name="name" placeholder="Name" required />
-        <input name="email" type="email" placeholder="Email" required />
-        <input name="organisation" placeholder="Organisation (optional)" />
-        <input name="phone" placeholder="Phone (optional)" />
-        <textarea name="experience" placeholder="Tell us about yourself" required />
-        <button>Submit</button>
-      </form>
+        <form className="flex flex-col items-center gap-5 mt-4" action={submitEOI}>
+          <select name="role" required>
+            <option value="SPONSOR">Sponsor</option>
+            <option value="MENTOR">Mentor</option>
+          </select>
+          <input className="form-input" name="name" placeholder="Name" required />
+          <input className="form-input" name="email" type="email" placeholder="Email" required />
+          <input className="form-input" name="organisation" placeholder="Organisation (optional)" />
+          <input className="form-input" name="phone" placeholder="Phone (optional)" />
+          <textarea className="form-input" name="experience" placeholder="Tell us about yourself" required />
+          <button className="form-button">Submit</button>
+        </form>
+      </div>
     </main>
   );
 } 

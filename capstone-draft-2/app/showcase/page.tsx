@@ -1,65 +1,50 @@
 import prisma from "../lib/prisma";
 import { getSession } from "../lib/session";
-import { createShowcasePost } from "../actions/actions";
+import DeleteButton from "./DeleteButton";
+import Link from "next/link";
 
 export default async function ShowcasePage() {
   const session = await getSession();
   const posts = await prisma.showcasePost.findMany({ orderBy: { createdAt: "desc" } });
+  const canManage = session?.user.role === "CONVENER";
 
   return (
     <main>
       <h1>Showcase</h1>
-      {session?.user.role === "CONVENER" && (  //showcase post form
-        <form action={createShowcasePost}>
-          <input name="title" placeholder="Title" required />
-          <label htmlFor="semcompleted">Semester completed</label>
-          <select id="semcompleted" name="semcompleted" required>
-            <option value="Semester 1">Semester 1</option>
-            <option value="Semester 2">Semester 2</option>
-          </select>
-          <select id="completed-year" name="yearcompleted">
-            {years.map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-          <input name="sponsor" placeholder="Sponsor" required/>
-          <input name="mentor" placeholder="Mentor" required />
-          <input name="organisation" placeholder="Organisation" />
-          <input name="student1" placeholder="Student 1" required />
-          <input name="student2" placeholder="Student 2" />
-          <input name="student3" placeholder="Student 3" />
-          <input name="student4" placeholder="Student 4" />
-          <textarea name="description" placeholder="Description" />
-          <button>Publish</button>
-        </form>
-      )}
+
+
+      {canManage && <Link className="flex justify-center text-gray-600 hover:text-blue-300" href="/showcase/new">Create Post</Link>} {/*convener post button*/}
+
+      {posts.length === 0 && <p>No showcase posts yet.</p>} {/*if there are no posts display this message*/}
+
       {posts.map((post) => (
-        <article key={post.id}>
-          <h2>{post.title}</h2>
-          <p>{post.semcompleted}</p>
-          <p>{post.yearcompleted}</p>
-          <p>{post.mentor}</p>
-          <p>{post.sponsor}</p>
-          <p>{post.organisation}</p>
-          <p>{post.student1}</p>
-          <p>{post.student2}</p>
-          <p>{post.student3}</p>
-          <p>{post.student4}</p>
-          <p>{post.description}</p>
-        </article>
+        <div key={post.id} className="post">
+          <div className="min-w-3xs">
+            {post.title && <h2 className="post-name">{post.title}</h2>}
+            {post.semcompleted && post.yearcompleted && (
+              <p className="mt-1"><b>Completed:</b> {post.semcompleted} {post.yearcompleted}</p>
+            )}
+            {post.sponsor && <p className="mt-1"><b>Sponsor:</b> {post.sponsor}</p>}
+            {post.mentor && <p className="mt-1"><b>Mentor:</b> {post.mentor}</p>}
+            {post.organisation && <p className="mt-1"><b>Organisation:</b> {post.organisation}</p>}
+            {post.student1 && <p className="mt-1"><b>Student 1:</b> {post.student1}</p>}
+            {post.student2 && <p className="mt-1"><b>Student 2:</b> {post.student2}</p>}
+            {post.student3 && <p className="mt-1"><b>Student 3:</b> {post.student3}</p>}
+            {canManage && (
+              <div style={{ display: "flex", gap: 12, marginTop: "1rem"}}>
+                <Link className="border-2 border-solid px-[5px] rounded-md" href={`/showcase/${post.id}/edit`}>Edit</Link> {/*convener edit button*/}
+                <DeleteButton id={post.id} /> {/*convener delete button*/}
+              </div>
+          )}
+          </div>
+          <div>
+            {post.description && <p>{post.description}</p>}
+          </div>
+        </div>
       ))}
+
+      
     </main>
   );
 }
 
-// Date selection dropdown script
-//https://medium.com/better-programming/how-to-dynamically-populate-a-year-dropdown-with-javascript-bcf4f849bc4f
-
-const currentYear = new Date().getFullYear(); //gets current year
-const earliestYear = 1967;     //year that UC started
-const years = Array.from(
-  {length:currentYear - earliestYear +1},
-  (_,i) => currentYear - i
-);

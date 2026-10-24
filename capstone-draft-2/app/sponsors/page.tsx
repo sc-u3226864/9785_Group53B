@@ -18,7 +18,7 @@ export default async function SponsorPage() {
 
       {canManage && <Link className="flex justify-center text-gray-600 hover:text-blue-300" href="/sponsors/new">Create Post</Link>} {/*convener post button*/}
 
-      {posts.length === 0 && <p>No sponsor posts yet.</p>} {/*if there are no posts display this message*/}
+      {posts.length === 0 && <p className="text-gray-600 text-center">No sponsor posts yet.</p>} {/*if there are no posts display this message*/}
 
       {posts.map((post) => (
         <div key={post.id} className="post">
