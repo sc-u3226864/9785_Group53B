@@ -15,7 +15,7 @@ export default async function ProjectsPage({ searchParams }: { searchParams: Pro
 
   return (
     <main>
-      <h1>Projects</h1>
+      <h1 className="text-[#006c91]" >Projects</h1>
       {submitted && <p>Thanks! Your proposal is awaiting review.</p>} {/* if the url has projects?submitted=1 then return thankyou message */}
 
       {canManage && <Link className="flex justify-center text-gray-600 hover:text-blue-300" href="/projects/new">Submit Project Proposal</Link>}  {/* only sponsors get to see the form button */}

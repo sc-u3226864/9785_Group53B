@@ -10,12 +10,11 @@ export default async function ShowcasePage() {
 
   return (
     <main>
-      <h1>Showcase</h1>
-
+      <h1 className="text-[#006c91]">Showcase</h1>
 
       {canManage && <Link className="flex justify-center text-gray-600 hover:text-blue-300" href="/showcase/new">Create Post</Link>} {/*convener post button*/}
 
-      {posts.length === 0 && <p>No showcase posts yet.</p>} {/*if there are no posts display this message*/}
+      {posts.length === 0 && <p className="text-gray-600 text-center">No showcase posts yet.</p>} {/*if there are no posts display this message*/}
 
       {posts.map((post) => (
         <div key={post.id} className="post">
@@ -31,7 +30,7 @@ export default async function ShowcasePage() {
             {post.student2 && <p className="mt-1"><b>Student 2:</b> {post.student2}</p>}
             {post.student3 && <p className="mt-1"><b>Student 3:</b> {post.student3}</p>}
             {canManage && (
-              <div style={{ display: "flex", gap: 12, marginTop: "1rem"}}>
+              <div className="flex flex-col gap-2 mt-4">
                 <Link className="border-2 border-solid px-[5px] rounded-md" href={`/showcase/${post.id}/edit`}>Edit</Link> {/*convener edit button*/}
                 <DeleteButton id={post.id} /> {/*convener delete button*/}
               </div>
