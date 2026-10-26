@@ -116,6 +116,7 @@ model EOIForm { //this form is for sponsors and mentors, they can choose their r
   organisation String?             //optional as mentors don't really need to enter that information, for future iterations will make seperate forms
   experience   String
   status       Status   @default(PENDING)
+  cvfile       String
   createdAt    DateTime @default(now())
 }
 

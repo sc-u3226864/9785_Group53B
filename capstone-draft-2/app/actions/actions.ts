@@ -54,8 +54,29 @@ export async function setPassword(formData: FormData) { //https://better-auth.co
 }
 
 // ------ EOI FORM ACTIONS
+// https://medium.com/codetodeploy/file-uploads-in-next-js-complete-guide-with-server-actions-83a5ad4ece5b
+
+export async function saveFile(file: File): Promise<string> {
+  if (!file.type.startsWith("application/")) throw new Error("Must be a document"); //check file type and size
+  if (file.size > maxSize) throw new Error("File too large (max 5 MB)");
+
+  const ext = { "application/pdf": ".pdf", "application/msword": ".doc", "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ".docx" }[file.type]; //must be one of these three types, if not throw error
+  if (!ext) throw new Error("Unsupported document type");
+  const filename = `${crypto.randomUUID()}${ext}`; //generate a random filename for the document to avoid conflicts
+  const dir = path.join(process.cwd(), "public", "cvs"); //saves document at public/uploads
+
+  await mkdir(dir, { recursive: true }); //create the uploads directory if it doesn't exist, no error if it does exist
+  await writeFile(path.join(dir, filename), Buffer.from(await file.arrayBuffer())); //write the file to the uploads directory, convert the file to a buffer from an array buffer, https://medium.com/@devcodehunter/mastering-buffers-in-node-js-a-complete-guide-with-examples-e8e6f8e07408
+
+  return `/cvs/${filename}`;
+}
+
 
 export async function submitEOI(formData: FormData) {
+  const file = formData.get("file");
+  if (!(file instanceof File) || file.size === 0) {
+    throw new Error("Please upload your CV.");
+  }
     const data = z
         .object({
             role: z.enum(["SPONSOR", "MENTOR"]),
@@ -63,10 +84,11 @@ export async function submitEOI(formData: FormData) {
             email: z.string().toLowerCase().trim().max(100).pipe(z.email()),
             organisation: text(100).optional(),
             experience: text(5000),
-            phone: text(20).optional(),
+            phone: z.string().max(20).optional(),
         })
         .parse(Object.fromEntries(formData)); //validate the form data with zod schema, if invalid it will throw an error
-    await prisma.eOIForm.create({ data }); //save the form data to the database
+        const cvfile = await saveFile(file);
+    await prisma.eOIForm.create({ data: { ...data, cvfile } }); //save the form data to the database
     redirect("/eoi?sent=1"); //redirect to eoi submitted page
 }
 

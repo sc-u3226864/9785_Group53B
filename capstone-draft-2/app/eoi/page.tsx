@@ -17,6 +17,7 @@ export default async function EoiPage({ searchParams }: { searchParams: Promise<
           <input className="form-input" name="organisation" placeholder="Organisation (optional)" />
           <input className="form-input" name="phone" placeholder="Phone (optional)" />
           <textarea className="form-input" name="experience" placeholder="Tell us about yourself" required />
+          <input type="file" name="file" />
           <button className="form-button">Submit</button>
         </form>
       </div>
