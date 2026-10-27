@@ -84,7 +84,7 @@ We track deadlines through our GitHub project and weekly scrum meetings, address
 <img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/3cdd85d1-1574-4649-9e80-c4252e0dd74e" />
 
 2. rename the file to '.env' so .gitignore picks it up - this file should NEVER be committed publicly
-3. DATABASE_URL: I have sent you all a link to the Prisma Console to your UC emails. Go to Databases > 'capstone' > Dashboard > click the Connect button > Quick Connect > copy the URL and paste into the field in you .env file
+3. DATABASE_URL: I have sent you all a link to the Prisma Console to your UC emails. Go to Databases > 'Lively Peach Colt' > Dashboard > click the Connect button > Quick Connect > copy the URL and paste into the field in you .env file
 <img width="600" height="400" alt="image" src="https://github.com/user-attachments/assets/17bc06d2-c2b3-48e7-bafd-c7e34cc0df46" />
 
 
