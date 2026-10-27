@@ -31,7 +31,7 @@ export default async function ShowcasePage() {
             {post.student3 && <p className="mt-1"><b>Student 3:</b> {post.student3}</p>}
             {canManage && (
               <div className="flex flex-col gap-2 mt-4">
-                <Link className="border-2 border-solid px-[5px] rounded-md" href={`/showcase/${post.id}/edit`}>Edit</Link> {/*convener edit button*/}
+                <Link className="border-2 border-solid px-[5px] rounded-md " href={`/showcase/${post.id}/edit`}>Edit</Link> {/*convener edit button*/}
                 <DeleteButton id={post.id} /> {/*convener delete button*/}
               </div>
           )}

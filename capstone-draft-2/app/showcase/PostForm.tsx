@@ -29,7 +29,7 @@ export default function PostForm({ action, post }: Props) { //reusable form for 
 
       <label>
         Title *: 
-        <input className="form-input" name="title" defaultValue={post?.title} placeholder="John Smith" required />
+        <input className="form-input" name="title" defaultValue={post?.title} placeholder="Big App" required />
       </label>
 
       <label>

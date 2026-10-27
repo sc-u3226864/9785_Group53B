@@ -27,22 +27,22 @@ export default function PostForm({ action, post }: Props) { //reusable form for 
 
       <label>
         Name *
-        <input className="form-input" name="name" defaultValue={post?.name} required />
+        <input className="form-input" name="name" defaultValue={post?.name} placeholder="John Doe" required />
       </label>
 
       <label>
         Email
-        <input className="form-input" name="email" type="email" defaultValue={post?.email ?? ""} />
+        <input className="form-input" name="email" type="email" defaultValue={post?.email ?? ""} placeholder="john.doe@example.com" />
       </label>
 
       <label>
         Phone
-        <input className="form-input" name="phone" defaultValue={post?.phone ?? ""} />
+        <input className="form-input" name="phone" defaultValue={post?.phone ?? ""} placeholder="0412 345 678" />
       </label>
 
       <label>
         Experience *
-        <textarea className="form-input" name="experience" defaultValue={post?.experience} rows={5} required />
+        <textarea className="form-input" name="experience" defaultValue={post?.experience} rows={5} required placeholder="John Doe has over 10 years of experience at Big Corp as a Software Engineer..." />
       </label>
 
       <label>

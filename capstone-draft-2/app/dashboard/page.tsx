@@ -19,7 +19,7 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mx-3">
       {eois.map((eOIForm) => (
         <div key={eOIForm.id}>
-          <form className="flex flex-row border-black border-[3px] rounded-md px-2">
+          <form className="flex flex-row border-[#00809f] border-[3px] rounded-md px-2 gap-[10px]!">
             <div className="flex flex-col justify-start w-1/3">
               <p className="flex justify-start"><b>{eOIForm.name}</b></p>
               <p className="flex justify-start">{eOIForm.role}</p>
@@ -31,7 +31,7 @@ export default async function DashboardPage() {
             </div>
             <div className="flex flex-col justify-center w-2/3">
               <p className="flex justify-center">{eOIForm.experience}</p>
-              <p className="flex justify-center"><a href={`${eOIForm.cvfile}`} target="_blank" rel="noopener noreferrer">View CV</a></p>
+              <p className="flex justify-center "><a className="hover:text-[#006c91] rounded-md px-1 my-1 bg-white hover:bg-[#54a2bc]" href={`${eOIForm.cvfile}`} target="_blank" rel="noopener noreferrer">View CV</a></p>
               
               <input type="hidden" name="id" value={eOIForm.id} />
             </div>
