@@ -3,6 +3,8 @@
 // [2] styling inspired by https://www.canberra.edu.au/content/myuc/home.html
 
 import Image from "next/image";
+import Showcase from "./components/Showcase";
+
 
 export default function Home() {
   return (
@@ -12,7 +14,7 @@ export default function Home() {
       <div className="explore-project-cta flex flex-row ">
         <div className="flex flex-col gap-10 justify-center">
           <p className="text-3xl text-white">Ready to start your capstone?</p>
-          <a className="text-2xl bg-[#d3eef4] text-[#006c91] py-4 rounded-sm text-center hover:bg-[#d3eef4]/50" href="/projects">Explore available projects</a>
+          <a className="text-2xl bg-[#d3eef4] text-[#006c91] py-4 rounded-sm text-center shadow-xl hover:bg-[#d3eef4]/50" href="/projects">Explore available projects</a>
         </div>
         <Image src="/images/teamwork.webp" width={500} height={500} alt="Picture of the author"/> {/* https://iconscout.com/free-illustration/free-teamwork-illustration_1785594 */}
       </div>
@@ -23,6 +25,7 @@ export default function Home() {
         <a className="link-buttons" href="/mentors">See our Mentors</a>
         <a className="link-buttons" href="/sponsors">See our Sponsors</a>
       </div>
+      <Showcase />
     </main>
   );
 }
