@@ -3,7 +3,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";  //https://nextjs.org/docs/app/api-reference/functions/revalidatePath#usage after a server action which changes data this will be used to revalidate the page
-import { email, z } from "zod";  //input validation library for forms https://zod.dev/
+import { z } from "zod";  //input validation library for forms https://zod.dev/
 import { auth } from "../lib/auth"; 
 import prisma from "../lib/prisma";
 import { requireRole } from "../lib/session";
@@ -66,7 +66,7 @@ export async function saveFile(file: File): Promise<string> {
   const dir = path.join(process.cwd(), "public", "cvs"); //saves document at public/uploads
 
   await mkdir(dir, { recursive: true }); //create the uploads directory if it doesn't exist, no error if it does exist
-  await writeFile(path.join(dir, filename), Buffer.from(await file.arrayBuffer())); //write the file to the uploads directory, convert the file to a buffer from an array buffer, https://medium.com/@devcodehunter/mastering-buffers-in-node-js-a-complete-guide-with-examples-e8e6f8e07408
+  await writeFile(path.join(dir, filename), Buffer.from(await file.arrayBuffer())); //write the file to the public/cvs directory, convert the file to a buffer from an array buffer, https://medium.com/@devcodehunter/mastering-buffers-in-node-js-a-complete-guide-with-examples-e8e6f8e07408
 
   return `/cvs/${filename}`;
 }
@@ -91,8 +91,6 @@ export async function submitEOI(formData: FormData) {
     await prisma.eOIForm.create({ data: { ...data, cvfile } }); //save the form data to the database
     redirect("/eoi?sent=1"); //redirect to eoi submitted page
 }
-
-// TO-DO: add action so a CV can be uploaded and saved to the db + convener can download it from the
 
 // ------ CONVENER ACTIONS
 export async function approveEoi(formData: FormData) {
@@ -139,8 +137,22 @@ export async function reviewProject(formData: FormData) { //review project serve
 }
 
 // ------ SHOWCASE ACTIONS
+async function saveShowcaseImage(file: File): Promise<string> {
+  if (!file.type.startsWith("image/")) throw new Error("File must be an image"); //check file type and size
+  if (file.size > maxSize) throw new Error("Image too large (max 5 MB)");
 
-async function readShowcasePost (formData: FormData) {
+  const ext = { "image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp" }[file.type]; //must be one of these three types, if not throw error
+  if (!ext) throw new Error("Unsupported image type");
+  const filename = `${crypto.randomUUID()}${ext}`; //generate a random filename for the image to avoid conflicts
+  const dir = path.join(process.cwd(), "public", "showcase"); //saves image at public/showcase
+
+  await mkdir(dir, { recursive: true }); //create the uploads directory if it doesn't exist, no error if it does exist
+  await writeFile(path.join(dir, filename), Buffer.from(await file.arrayBuffer())); //write the file to the uploads directory, convert the file to a buffer from an array buffer, https://medium.com/@devcodehunter/mastering-buffers-in-node-js-a-complete-guide-with-examples-e8e6f8e07408
+
+  return `/showcase/${filename}`;
+}
+
+async function readShowcasePost (formData: FormData , existingImageURL: string | null = null,) {
   const title = String(formData.get("title") ?? "").trim(); //grabs the form entries and clears trailing whitespace, if empty adds empty string
   const semCompleted = String(formData.get("semCompleted") ?? "").trim(); 
   const yearCompleted = String(formData.get("yearCompleted") ?? "").trim(); 
@@ -156,7 +168,12 @@ async function readShowcasePost (formData: FormData) {
   if (!title) throw new Error("Title is required.");  //manual error handling if no title or description is submitted
   if (!description) throw new Error("Description is required.");
 
-  //TODO: add image upload for showcase posts, currently just text fields
+  const file = formData.get("showcaseImage");
+  const showcaseImageURL =
+    file instanceof File && file.size > 0
+      ? await saveShowcaseImage(file)
+      : existingImageURL;
+
   return { //returns the form data as an object for prisma, null for emty values so there's no error
     title,
     semcompleted: semCompleted,
@@ -169,6 +186,7 @@ async function readShowcasePost (formData: FormData) {
     student3: student3 || null,
     student4: student4 || null,
     description,
+    showcaseImageURL, 
   };
 }
 
@@ -179,13 +197,15 @@ export async function createShowcasePost(formData: FormData) { //convener create
     data: { ...data, author: { connect: { id: session.user.id } } },
   });
   revalidatePath("/showcase");  //revalidates the showcase page so the new post is displayed
+  revalidatePath("/"); //so carousel updates
   redirect("/showcase");
 }
 
 export async function updateShowcasePost(formData: FormData) { //convener edit form
   await requireRole("CONVENER");
   const id = String(formData.get("id") ?? ""); //grabs the id of the post to be updated
-  const data = await readShowcasePost(formData);  //reads the form data and returns an object for prisma at that id
+  const post = await prisma.showcasePost.findUniqueOrThrow({ where: { id } });
+  const data = await readShowcasePost(formData, post.showcaseImageURL);  //reads the form data and returns an object for prisma at that id
   await prisma.showcasePost.update({ where: { id }, data });
   revalidatePath("/showcase");
   redirect("/showcase");
@@ -199,7 +219,6 @@ export async function deleteShowcasePost(formData: FormData) { //convener delete
 }
 
 // ------ SPONSOR ACTIONS
-// TO-DO: add sponsor actions for creating, editing and deleting sponsor posts
 export async function createProject(formData: FormData) { //for sponsors to create a project submission
   const session = await requireRole("SPONSOR");
   const data = z.object(
