@@ -147,6 +147,7 @@ model ShowcasePost {
   description      String         //string explaining the project
   authorId  String        //doesn't need to be included in the post
   author    User     @relation(fields: [authorId], references: [id])
+  showcaseImageURL String?
   createdAt DateTime @default(now())
 }
 
