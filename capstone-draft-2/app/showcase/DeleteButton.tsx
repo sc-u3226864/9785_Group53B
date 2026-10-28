@@ -1,11 +1,11 @@
 "use client";
 
-import { deleteSponsorPost } from "../actions/actions";
+import { deleteShowcasePost } from "../actions/actions";
 
 export default function DeleteButton({ id }: { id: string }) {
   return (
     <form
-      className="border-2 border-solid px-[5px] rounded-md cursor-pointer" action={deleteSponsorPost}
+      className="border-2 border-solid px-[5px] rounded-md cursor-pointer" action={deleteShowcasePost}
       onSubmit={(e) => {
         if (!confirm("Are you sure you want to delete this post?")) {
           e.preventDefault();

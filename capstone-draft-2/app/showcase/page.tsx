@@ -19,6 +19,7 @@ export default async function ShowcasePage() {
       {posts.map((post) => (
         <div key={post.id} className="post">
           <div className="min-w-3xs">
+            {post.showcaseImageURL && <img src={post.showcaseImageURL} alt={post.title} width={200} height={200} className="rounded-md"/>}
             {post.title && <h2 className="post-name">{post.title}</h2>}
             {post.semcompleted && post.yearcompleted && (
               <p className="mt-1"><b>Completed:</b> {post.semcompleted} {post.yearcompleted}</p>

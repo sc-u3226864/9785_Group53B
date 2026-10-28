@@ -12,12 +12,13 @@ type Props = { // what a page must pass in
     yearcompleted: string;
     sponsor: string;
     mentor: string;
-    organisation?: string;
+    organisation?: string | null;
     student1: string;
-    student2?: string;
-    student3?: string;
-    student4?: string;
-    description?: string;
+    student2?: string | null;
+    student3?: string | null;
+    student4?: string | null;
+    description: string;
+    showcaseImageURL: string | null;
   };
 };
 
@@ -25,7 +26,9 @@ export default function PostForm({ action, post }: Props) { //reusable form for 
   return (
     <div style={{display:"flex", justifyContent:"center"}}>
     <form action={action} style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 500}}>
-      {post && <input type="hidden" name="id" value={post.id} />} {/*which post is being edited */}      
+      {post && <input type="hidden" name="id" value={post.id} />} {/*which post is being edited */}    
+      {post?.showcaseImageURL && (
+        <img src={post.showcaseImageURL} alt="Current showcase image" width={200} />)}  
 
       <label>
         Title *: 
@@ -89,6 +92,12 @@ export default function PostForm({ action, post }: Props) { //reusable form for 
       <label>
         Description *: 
         <textarea className="form-input" name="description" defaultValue={post?.description} rows={5} required placeholder="Describe your showcase post..."/>
+      </label>
+
+      <label>
+        
+        Showcase Image URL (leave blank for none):
+        <input className="hover:text-[#009abc] cursor-pointer border-black border-1 pl-1 rounded-md" name="showcaseImage" type="file" accept="image/*" />
       </label>
 
       <button type="submit">Save</button> {/*submit button to save the form data, when clicked it will trigger the action function passed as a prop to the PostForm component*/}
