@@ -27,8 +27,8 @@ export default async function MentorsPage() {
             {post.email && <p className="mt-1"><b>Email:</b> {post.email}</p>}
             {post.phone && <p className="mt-1"><b>Phone:</b> {post.phone}</p>}
             {canManage && (
-              <div style={{ display: "flex", gap: 12, marginTop: "1rem"}}>
-                <Link className="border-2 border-solid px-[5px] rounded-md" href={`/mentors/${post.id}/edit`}>Edit</Link> {/*convener edit button*/}
+              <div className="flex flex-col justify-center gap-3 mt-2">
+                <Link className="form-button" href={`/mentors/${post.id}/edit`}>Edit</Link> {/*convener edit button*/}
                 <DeleteButton id={post.id} /> {/*convener delete button*/}
               </div>
           )}

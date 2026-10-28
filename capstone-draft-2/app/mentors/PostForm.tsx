@@ -47,10 +47,10 @@ export default function PostForm({ action, post }: Props) { //reusable form for 
 
       <label>
         Image URL (leave blank for default)
-        <input name="image" type="file" accept="image/*" />
+        <input className="hover:text-[#009abc] cursor-pointer border-black border-1 pl-1 rounded-md" name="image" type="file" accept="image/*" />
       </label>
 
-      <button type="submit">Save</button> {/*submit button to save the form data, when clicked it will trigger the action function passed as a prop to the PostForm component*/}
+      <div className="flex justify-center mb-3"><button className="form-button" type="submit">Save</button></div> {/*submit button to save the form data, when clicked it will trigger the action function passed as a prop to the PostForm component*/}
     </form>
     </div>
   );

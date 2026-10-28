@@ -21,7 +21,7 @@ export default async function EditPostPage({
     <main style={{ maxWidth: 700, margin: "0 auto", padding: 20 }}>
       <h1>Edit Mentor Post</h1>
       <PostForm action={updateMentorPost} post={post} /> {/*passes the updateMentorPost function as a prop to the PostForm component, which will be called when the form is submitted. It also passes the post object as a prop to pre-fill the form with the existing post data*/}
-      <p><Link href="/mentors">Cancel</Link></p>
+      <p className="flex justify-center"><Link className="form-button" href="/mentors">Cancel</Link></p>
     </main>
   );
 }
