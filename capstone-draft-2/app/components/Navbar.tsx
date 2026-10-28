@@ -12,8 +12,8 @@ export async function Navbar() {
   const isConvener = session?.user.role === "CONVENER"; //checks if user is convener to show dashboard link
   const isLoggedIn = !!session; //checks if user is logged in to show login link
   return (
-    <nav className="shadow-md">
-      <ul className="flex flex-row justify-center bg-[#00809f] text-white justify-evenly nav-bar-active">
+    <nav>
+      <ul className="flex flex-row justify-center bg-[#00809f] text-white justify-evenly">
         <Link className="nav-bar-select" href="/">Home</Link>
         <Link className="nav-bar-select" href="/mentors">Mentors</Link>
         <Link className="nav-bar-select" href="/sponsors">Sponsors</Link>

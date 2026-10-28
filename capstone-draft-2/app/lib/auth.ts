@@ -15,7 +15,7 @@ export const auth = betterAuth({
     disableSignup: true, //account creation is from eoi form approval, no public signup
     resetPasswordTokenExpiresIn: 60 * 60 * 24, //24 hour reset password token expiration
     sendResetPassword: async ({user, url}) => 
-      {console.log(`Reset password email sent to ${user.email} with url: ${url}`);}, //for testing, in prod we'll set it up with Resend
+      {console.log(`Reset password email sent to ${user.email} with url: ${url}`);}, //TODO: this is for local testing, in prod we suggest setting it up with Resend
   }, 
   user: {
     additionalFields: {

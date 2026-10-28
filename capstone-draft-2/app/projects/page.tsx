@@ -1,6 +1,5 @@
 import prisma from "../lib/prisma";
 import { getSession } from "../lib/session";
-import { createProject } from "../actions/actions";
 import Link from "next/link";
 
 export default async function ProjectsPage({ searchParams }: { searchParams: Promise<{ submitted?: string }> }) {
@@ -34,19 +33,3 @@ export default async function ProjectsPage({ searchParams }: { searchParams: Pro
     </main>
   );
 }
-
-/*
-
-        <>
-        <h2>Submit project proposal</h2>
-        <form action={createProject}>
-          <input name="title" placeholder="Title" required />
-          <textarea name="description" placeholder="Description" required />
-          <textarea name="scope" placeholder="Scope" required />
-          <textarea name="skills" placeholder="Skills required" required />
-          <button>Submit for review</button>
-        </form>
-        </>
-      )}
-
-*/

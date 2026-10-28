@@ -20,7 +20,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en">
       <body className={`${lato.variable} flex flex-col min-h-dvh`}>
-        <div className = "z-10 shadow-md">
+        <div className = "z-10 shadow-xl">
           <Navbar />
         </div>
         {children}

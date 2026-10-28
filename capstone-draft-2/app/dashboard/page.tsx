@@ -1,6 +1,6 @@
 import prisma from "../lib/prisma";
 import { requireRole } from "../lib/session";
-import { approveEoi, deleteEoi, reviewProject, logout } from "../actions/actions";
+import { approveEoi, deleteEoi, reviewProject} from "../actions/actions";
 
 export default async function DashboardPage() {
   await requireRole("CONVENER");                   // this is a convener only page so checking logged in user is a convener
