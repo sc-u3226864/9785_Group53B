@@ -41,7 +41,7 @@ export default function PostForm({ action, project }: Props) { //reusable form f
       </label>
 
 
-      <button type="submit">Save</button> {/*submit button to save the form data, when clicked it will trigger the action function passed as a prop to the PostForm component*/}
+      <div className="flex justify-center mb-3"><button className="form-button" type="submit">Save</button></div> {/*submit button to save the form data, when clicked it will trigger the action function passed as a prop to the PostForm component*/}
     </form>
     </div>
   );

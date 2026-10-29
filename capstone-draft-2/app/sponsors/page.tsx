@@ -16,7 +16,7 @@ export default async function SponsorPage() {
     <main>
       <h1 className="text-[#006c91]">Sponsors</h1>
 
-      {canManage && <Link className="flex justify-center text-gray-600 hover:text-blue-300" href="/sponsors/new">Create Post</Link>} {/*convener post button*/}
+      {canManage && <Link className="flex justify-center w-[200px] mx-auto my-1 bg-white rounded-xl text-gray-600 hover:bg-[#bae2eb]" href="/sponsors/new">Create Post</Link>} {/*convener post button*/}
 
       {posts.length === 0 && <p className="text-gray-600 text-center">No sponsor posts yet.</p>} {/*if there are no posts display this message*/}
 
@@ -28,8 +28,8 @@ export default async function SponsorPage() {
             {post.email && <p className="mt-1"><b>Email:</b> {post.email}</p>}
             {post.phone && <p className="mt-1"><b>Phone:</b> {post.phone}</p>}
             {canManage && (
-              <div style={{ display: "flex", gap: 12, marginTop: "1rem"}}>
-                <Link className="border-2 border-solid px-[5px] rounded-md" href={`/sponsors/${post.id}/edit`}>Edit</Link> {/*convener edit button*/}
+              <div className="flex flex-col justify-center gap-3 mt-2">
+                <Link className="form-button" href={`/sponsors/${post.id}/edit`}>Edit</Link> {/*convener edit button*/}
                 <DeleteButton id={post.id} /> {/*convener delete button*/}
               </div>
           )}

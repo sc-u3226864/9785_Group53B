@@ -16,7 +16,7 @@ export default async function MentorsPage() {
     <main>
       <h1 className="text-[#006c91]">Mentors</h1>
 
-      {canManage && <Link className="flex justify-center text-gray-600 hover:text-blue-300" href="/mentors/new">Create Post</Link>} {/*convener post button*/}
+      {canManage && <Link className="flex justify-center w-[200px] mx-auto my-1 bg-white rounded-xl text-gray-600 hover:bg-[#bae2eb]" href="/mentors/new">Create Post</Link>} {/*convener post button*/}
 
       {posts.length === 0 && <p className="text-gray-600 text-center">No mentor posts yet.</p>} {/*if there are no posts display this message*/}
 

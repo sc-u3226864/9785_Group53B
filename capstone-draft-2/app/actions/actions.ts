@@ -233,6 +233,13 @@ export async function createProject(formData: FormData) { //for sponsors to crea
   redirect("/projects?submitted=1");
 }
 
+export async function deleteProjectPost(formData: FormData) { //convener delete form
+  await requireRole("CONVENER");
+  const id = String(formData.get("id") ?? "");
+  await prisma.project.delete({ where: { id } });
+  revalidatePath("/project");
+}
+
 // ------ MENTOR POST ACTIONS
 
 async function readMentorForm(formData: FormData) {

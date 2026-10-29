@@ -100,7 +100,7 @@ export default function PostForm({ action, post }: Props) { //reusable form for 
         <input className="hover:text-[#009abc] cursor-pointer border-black border-1 pl-1 rounded-md" name="showcaseImage" type="file" accept="image/*" />
       </label>
 
-      <button type="submit">Save</button> {/*submit button to save the form data, when clicked it will trigger the action function passed as a prop to the PostForm component*/}
+      <button className="form-button mx-auto mb-3" type="submit">Save</button> {/*submit button to save the form data, when clicked it will trigger the action function passed as a prop to the PostForm component*/}
     </form>
     </div>
   );

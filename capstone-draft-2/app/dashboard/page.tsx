@@ -19,36 +19,46 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mx-3">
       {eois.map((eOIForm) => (
         <div key={eOIForm.id}>
-          <form className="flex flex-row border-[#00809f] border-[3px] rounded-md px-2 gap-[10px]!">
-            <div className="flex flex-col justify-start w-1/3">
-              <p className="flex justify-start"><b>{eOIForm.name}</b></p>
-              <p className="flex justify-start">{eOIForm.role}</p>
-              <p className="flex justify-start">{eOIForm.email}</p>
-              <p className="flex justify-start">{eOIForm.organisation}</p>
-              <p className="flex justify-start">{eOIForm.phone}</p>
-              <button formAction={approveEoi}>Approve</button>
-              <button formAction={deleteEoi}>Delete</button>
-            </div>
-            <div className="flex flex-col justify-center w-2/3">
-              <p className="flex justify-center">{eOIForm.experience}</p>
-              <p className="flex justify-center "><a className="hover:text-[#006c91] rounded-md px-1 my-1 bg-white hover:bg-[#54a2bc]" href={`${eOIForm.cvfile}`} target="_blank" rel="noopener noreferrer">View CV</a></p>
-              
-              <input type="hidden" name="id" value={eOIForm.id} />
-            </div>
-          </form>
+          <div className="">
+            <form className="post flex-col!">
+              <div className="flex flex-row!">
+                <div>
+                  <p className="flex justify-start text-gray-800 font-bold text-xl"><b>{eOIForm.name}</b></p>
+                  <p className="flex justify-start font-bold">{eOIForm.role}</p>
+                  <p className="flex justify-start font-bold">{eOIForm.email}</p>
+                  <p className="flex justify-start font-bold">{eOIForm.organisation}</p>
+                  <p className="flex justify-start font-bold">{eOIForm.phone}</p>
+                </div>
+                <div className="flex flex-col gap-2 ml-auto">
+                  <button className="form-button" formAction={approveEoi}>Approve</button>
+                  <button className="form-button" formAction={deleteEoi}>Delete</button>
+                </div>
+              </div>
+              <div className="flex flex-col justify-center">
+                <p className="flex justify-center">{eOIForm.experience}</p>
+                <p className="flex justify-center "><a className="flex justify-center w-[200px] mx-auto my-1 bg-white rounded-xl text-gray-600 hover:bg-[#bae2eb]" href={`${eOIForm.cvfile}`} target="_blank" rel="noopener noreferrer">View CV</a></p>
+                
+                <input type="hidden" name="id" value={eOIForm.id} />
+              </div>
+            </form>
+          </div>
         </div>
       ))}
       </div>
       <h2 className="!text-gray-600 text-center">Project proposals</h2>
       {projects.map((p) => (
-        <form className="flex flex-col justify-center" key={p.id} action={reviewProject}>
-          <p className="flex justify-center"><b>{p.title}</b> by {p.sponsor.name}</p>
-          <p className="flex justify-center">{p.description}</p>
-          <p className="flex justify-center">{p.scope}</p>
-          <p className="flex justify-center">{p.skills}</p>
+        <form className="flex flex-col justify-center post" key={p.id} action={reviewProject}>
+          <div className="flex flex-col!">
+            <p className="flex justify-center text-xl"><b>{p.title}</b></p>
+            <p className="flex justify-center text-lg">{p.sponsor.name}</p>
+            <button className="form-button mt-2" name="status" value="APPROVED">Approve</button>
+            <button className="form-button mt-2" name="status" value="REJECTED">Reject</button>
+          </div>
+          <p className="text-center"><b>Description: </b>{p.description}</p>
+          <p className="text-center"><b>Scope: </b>{p.scope}</p>
+          <p className="text-center"><b>Skills: </b>{p.skills}</p>
           <input type="hidden" name="id" value={p.id} />
-          <button name="status" value="APPROVED">Approve</button>
-          <button name="status" value="REJECTED">Reject</button>
+          
         </form>
       ))}
     </main>

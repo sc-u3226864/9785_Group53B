@@ -10,7 +10,7 @@ export default async function NewPostPage() {
     <main style={{ maxWidth: 700, margin: "0 auto", padding: 20 , backgroundColor: "white"}}>
       <h1>Create Project Post</h1>
       <PostForm action={createProject} /> {/*passes the createProject function as a prop to the PostForm component, which will be called when the form is submitted*/}
-      <p className="text-center" ><Link href="/sponsors">Cancel</Link></p>
+      <p className="text-center mt-2" ><Link className="form-button" href="/sponsors">Cancel</Link></p>
     </main>
   );
 }
