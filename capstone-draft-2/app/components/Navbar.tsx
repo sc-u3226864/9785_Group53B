@@ -1,5 +1,4 @@
-// https://claude.ai/share/1d1d6011-653c-428c-967a-144fbb8e5228
-// includes aria labelling for accessibility (WCAG)
+// https://www.w3schools.com/css/css_navbar_horizontal.asp
 
 'use server'
 

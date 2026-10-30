@@ -11,8 +11,8 @@ async function main() {
     update: {},  //if user already exists do nothing
     create: { email, name: "Convener", role: "CONVENER" }, //if user doesn't exist create new user with email, name and role
   });
-  await auth.api.requestPasswordReset({            // prints the set-password link in the terminal > needs to be copied and stores somewhere for the initial run
-    body: { email, redirectTo: `${process.env.BETTER_AUTH_URL}/set-password` },
+  await auth.api.requestPasswordReset({            // prints the set-password link in the terminal > needs to be copied and stored somewhere for the initial run
+    body: { email, redirectTo: `${process.env.BETTER_AUTH_URL}/set-password` }, //https://better-auth.com/docs/authentication/email-password#api-method-request-password-reset
   });
 }
 

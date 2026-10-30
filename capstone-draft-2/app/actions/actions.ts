@@ -1,3 +1,6 @@
+//https://claude.ai/share/b2c8d32a-bef3-4292-92c7-eb976901ee3d - this prompt gave me a lot of reusable code which I was able to learn and reapply
+//to other pages and build functionality with. It helped a lot with role access, authentication, actions, prisma api actions, and page setup 
+
 "use server";
 
 import { headers } from "next/headers";
@@ -18,7 +21,7 @@ const maxSize = 5 * 1024 * 1024; // 5 MB
 const text = (max: number) => z.string().trim().min(1).max(max);
 
 // ------ AUTHENTICATION ACTIONS
-export async function login(formData: FormData) { //login server action
+export async function login(formData: FormData) { //login server action, FormData explanation: https://developer.mozilla.org/en-US/docs/Web/API/FormData
     let role: string | undefined;
     try {  //validate the email and password with better_auth api if invalid it will throw an error
         const result = await auth.api.signInEmail({
@@ -32,7 +35,7 @@ export async function login(formData: FormData) { //login server action
 }
 
 export async function logout() {
-  await auth.api.signOut({ headers: await headers() }); //https://better-auth.com/docs/basic-usage#signout
+  await auth.api.signOut({ headers: await headers() }); //https://better-auth.com/docs/authentication/email-password#sign-out
   redirect("/");
 }
 
@@ -49,14 +52,15 @@ export async function setPassword(formData: FormData) { //https://better-auth.co
     await auth.api.resetPassword({ body: { token, newPassword: String(formData.get("password")) } });
   } catch {
     redirect(`/set-password?token=${encodeURIComponent(token)}&error=1`); //if token is invalid or expired sends back to setpassword page
-  }
+  } // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent convert a text string into a URL-safe format
   redirect("/login");
 }
 
 // ------ EOI FORM ACTIONS
 // https://medium.com/codetodeploy/file-uploads-in-next-js-complete-guide-with-server-actions-83a5ad4ece5b
-
-export async function saveFile(file: File): Promise<string> {
+// File interface information https://developer.mozilla.org/en-US/docs/Web/API/File used to get information from a file upload
+// Promises: https://mimo.org/glossary/typescript/promise , promises are used to give the result of an asynchonous operation
+export async function saveFile(file: File): Promise<string> { //this function is used for the CV file upload in the submitEOI function
   if (!file.type.startsWith("application/")) throw new Error("Must be a document"); //check file type and size
   if (file.size > maxSize) throw new Error("File too large (max 5 MB)");
 
@@ -71,9 +75,8 @@ export async function saveFile(file: File): Promise<string> {
   return `/cvs/${filename}`;
 }
 
-
-export async function submitEOI(formData: FormData) {
-  const file = formData.get("file");
+export async function submitEOI(formData: FormData) { //used to create eoi form entry in db
+  const file = formData.get("file"); //https://developer.mozilla.org/en-US/docs/Web/API/FormData/get this is a XMLHttpRequest API method
   if (!(file instanceof File) || file.size === 0) {
     throw new Error("Please upload your CV.");
   }
@@ -87,22 +90,22 @@ export async function submitEOI(formData: FormData) {
             phone: z.string().max(20).optional(),
         })
         .parse(Object.fromEntries(formData)); //validate the form data with zod schema, if invalid it will throw an error
-        const cvfile = await saveFile(file);
+        const cvfile = await saveFile(file); //await used to settle the promise used in saveFile
     await prisma.eOIForm.create({ data: { ...data, cvfile } }); //save the form data to the database
     redirect("/eoi?sent=1"); //redirect to eoi submitted page
 }
 
 // ------ CONVENER ACTIONS
-export async function approveEoi(formData: FormData) {
+export async function approveEoi(formData: FormData) { //used to change eoi form entry to APPROVED, create user from eoi form, and reset new user password with betterauth client & api
   await requireRole("CONVENER");                   //checks the logged in user is the convener
   const eoi = await prisma.eOIForm.findUniqueOrThrow({
     where: { id: String(formData.get("id")), status: "PENDING" }, //find eoi forms with status PENDING
   });
 
-    // Both writes succeed together, or neither happens.
+    // Both writes succeed together, or neither happens. https://www.prisma.io/docs/orm/fundamentals/transactions
   await prisma.$transaction([ //ensures that multiple db operations are executed as a single unit of work, and rollback if any fail
-    prisma.eOIForm.update({ where: { id: eoi.id, status: "PENDING" }, data: { status: "APPROVED" } }),
-    prisma.user.create({  //create a new user with the eoi form data
+    prisma.eOIForm.update({ where: { id: eoi.id, status: "PENDING" }, data: { status: "APPROVED" } }), //https://www.prisma.io/docs/orm/v7/reference/prisma-client-reference#update
+    prisma.user.create({  //create a new user with the eoi form data https://www.prisma.io/docs/orm/v7/reference/prisma-client-reference#create
       data: {
         name: eoi.name,
         email: eoi.email,
@@ -114,18 +117,18 @@ export async function approveEoi(formData: FormData) {
     }),
   ]);
 
-  // Send the set-password link after the transaction commits (an email can't be rolled back).
+  // Send the set-password link after the transaction commits (an email can't be rolled back). https://better-auth.com/docs/authentication/email-password#api-method-request-password-reset
   await auth.api.requestPasswordReset({ body: { email: eoi.email, redirectTo: setPasswordUrl } });
   revalidatePath("/dashboard");
 }
 
 export async function deleteEoi(formData: FormData) { //deletes eoi form from the database
   await requireRole("CONVENER");
-  await prisma.eOIForm.delete({ where: { id: String(formData.get("id")), status: "PENDING" } });
+  await prisma.eOIForm.delete({ where: { id: String(formData.get("id")), status: "PENDING" } }); 
   revalidatePath("/dashboard");
 }
 
-export async function reviewProject(formData: FormData) { //review project server action so the convener can approve or reject a project
+export async function reviewProject(formData: FormData) { //review project action so the convener can approve or reject a project
   await requireRole("CONVENER");
   const status = z.enum(["APPROVED", "REJECTED"]).parse(formData.get("status")); // from the clicked button
   await prisma.project.update({
@@ -137,11 +140,11 @@ export async function reviewProject(formData: FormData) { //review project serve
 }
 
 // ------ SHOWCASE ACTIONS
-async function saveShowcaseImage(file: File): Promise<string> {
+async function saveShowcaseImage(file: File): Promise<string> { 
   if (!file.type.startsWith("image/")) throw new Error("File must be an image"); //check file type and size
   if (file.size > maxSize) throw new Error("Image too large (max 5 MB)");
 
-  const ext = { "image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp" }[file.type]; //must be one of these three types, if not throw error
+  const ext = { "image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp" }[file.type]; //uses dict lookup to match file type to extention, must be one of these three types, if not throw error
   if (!ext) throw new Error("Unsupported image type");
   const filename = `${crypto.randomUUID()}${ext}`; //generate a random filename for the image to avoid conflicts
   const dir = path.join(process.cwd(), "public", "showcase"); //saves image at public/showcase
@@ -152,7 +155,7 @@ async function saveShowcaseImage(file: File): Promise<string> {
   return `/showcase/${filename}`;
 }
 
-async function readShowcasePost (formData: FormData , existingImageURL: string | null = null,) {
+async function readShowcasePost (formData: FormData , existingImageURL: string | null = null,) { //used to collect form data for new posts and editing posts
   const title = String(formData.get("title") ?? "").trim(); //grabs the form entries and clears trailing whitespace, if empty adds empty string
   const semCompleted = String(formData.get("semCompleted") ?? "").trim(); 
   const yearCompleted = String(formData.get("yearCompleted") ?? "").trim(); 
@@ -170,7 +173,7 @@ async function readShowcasePost (formData: FormData , existingImageURL: string |
 
   const file = formData.get("showcaseImage");
   const showcaseImageURL =
-    file instanceof File && file.size > 0
+    file instanceof File && file.size > 0 //if no file uploaded run saveShowcaseImage, otherwise use existing image
       ? await saveShowcaseImage(file)
       : existingImageURL;
 
@@ -190,9 +193,9 @@ async function readShowcasePost (formData: FormData , existingImageURL: string |
   };
 }
 
-export async function createShowcasePost(formData: FormData) { //convener create form
+export async function createShowcasePost(formData: FormData) { 
   const session = await requireRole("CONVENER");
-  const data = await readShowcasePost(formData);   //reads the form data and returns an object for prisma
+  const data = await readShowcasePost(formData);   //reads the form data from readShowcasePost and returns an object for prisma
   await prisma.showcasePost.create({
     data: { ...data, author: { connect: { id: session.user.id } } },
   });
@@ -201,7 +204,7 @@ export async function createShowcasePost(formData: FormData) { //convener create
   redirect("/showcase");
 }
 
-export async function updateShowcasePost(formData: FormData) { //convener edit form
+export async function updateShowcasePost(formData: FormData) { 
   await requireRole("CONVENER");
   const id = String(formData.get("id") ?? ""); //grabs the id of the post to be updated
   const post = await prisma.showcasePost.findUniqueOrThrow({ where: { id } });
@@ -211,7 +214,7 @@ export async function updateShowcasePost(formData: FormData) { //convener edit f
   redirect("/showcase");
 }
 
-export async function deleteShowcasePost(formData: FormData) { //convener delete form
+export async function deleteShowcasePost(formData: FormData) { 
   await requireRole("CONVENER");
   const id = String(formData.get("id") ?? "");
   await prisma.showcasePost.delete({ where: { id } });
@@ -267,7 +270,7 @@ async function readMentorForm(formData: FormData) {
   };
 }
 
-export async function createMentorPost(formData: FormData) { //convener create form
+export async function createMentorPost(formData: FormData) { 
   await requireRole("CONVENER");
   const data = await readMentorForm(formData);   //reads the form data and returns an object for prisma
   await prisma.mentorPost.create({ data });
@@ -275,7 +278,7 @@ export async function createMentorPost(formData: FormData) { //convener create f
   redirect("/mentors");
 }
 
-export async function updateMentorPost(formData: FormData) { //convener edit form
+export async function updateMentorPost(formData: FormData) { 
   await requireRole("CONVENER");
   const id = String(formData.get("id") ?? ""); //grabs the id of the post to be updated
   const data = await readMentorForm(formData);  //reads the form data and returns an object for prisma at that id
@@ -284,13 +287,14 @@ export async function updateMentorPost(formData: FormData) { //convener edit for
   redirect("/mentors");
 }
 
-export async function deleteMentorPost(formData: FormData) { //convener delete form
+export async function deleteMentorPost(formData: FormData) { 
   await requireRole("CONVENER");
   const id = String(formData.get("id") ?? "");
   await prisma.mentorPost.delete({ where: { id } });
   revalidatePath("/mentors");
 }
 
+//this function is reused for the sponsor post actions
 async function saveImage(file: File): Promise<string> {
   if (!file.type.startsWith("image/")) throw new Error("File must be an image"); //check file type and size
   if (file.size > maxSize) throw new Error("Image too large (max 5 MB)");
@@ -336,7 +340,7 @@ async function readSponsorForm(formData: FormData) {
   };
 }
 
-export async function createSponsorPost(formData: FormData) { //convener create form
+export async function createSponsorPost(formData: FormData) { 
   await requireRole("CONVENER");
   const data = await readSponsorForm(formData);   //reads the form data and returns an object for prisma
   await prisma.sponsorPost.create({ data });
@@ -344,7 +348,7 @@ export async function createSponsorPost(formData: FormData) { //convener create 
   redirect("/sponsors");
 }
 
-export async function updateSponsorPost(formData: FormData) { //convener edit form
+export async function updateSponsorPost(formData: FormData) { 
   await requireRole("CONVENER");
   const id = String(formData.get("id") ?? ""); //grabs the id of the post to be updated
   const data = await readSponsorForm(formData);  //reads the form data and returns an object for prisma at that id
@@ -353,7 +357,7 @@ export async function updateSponsorPost(formData: FormData) { //convener edit fo
   redirect("/sponsors");
 }
 
-export async function deleteSponsorPost(formData: FormData) { //convener delete form
+export async function deleteSponsorPost(formData: FormData) { 
   await requireRole("CONVENER");
   const id = String(formData.get("id") ?? "");
   await prisma.sponsorPost.delete({ where: { id } });

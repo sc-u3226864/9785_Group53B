@@ -1,4 +1,4 @@
-// TO-DO setup mentor showcase
+// https://claude.ai/share/b2c8d32a-bef3-4292-92c7-eb976901ee3d
 
 import Link from "next/link";
 import prisma from "../lib/prisma";

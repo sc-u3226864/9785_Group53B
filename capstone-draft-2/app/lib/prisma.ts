@@ -1,5 +1,4 @@
-//https://better-auth.com/docs/adapters/prisma
-//https://www.prisma.io/docs/guides/authentication/better-auth/nextjs
+//https://www.prisma.io/docs/guides/authentication/better-auth/nextjs#24-set-up-a-global-prisma-client
 
 import { PrismaClient } from "../generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";

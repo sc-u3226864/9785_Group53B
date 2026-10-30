@@ -1,3 +1,5 @@
+//https://claude.ai/share/0926c9f6-5f4c-4ba8-be51-df90b8462753
+
 import fs from "fs";
 import path from "path";
 import Carousel from "./Carousel";

@@ -3,9 +3,10 @@ import { redirect } from "next/navigation";  // redirect user if not logged in o
 import { auth } from "../lib/auth"; 
 
 export async function getSession() {  //function gets session from request header, if no session returns null
-  return auth.api.getSession({ headers: await headers() }); //https://better-auth.com/docs/concepts/api  & https://better-auth.com/docs/concepts/session-management#get-session
+  return auth.api.getSession({ headers: await headers() }); //https://better-auth.com/docs/concepts/api#body-headers-query 
 }
 
+//https://claude.ai/share/b2c8d32a-bef3-4292-92c7-eb976901ee3d
 export async function requireRole(role: "CONVENER" | "SPONSOR" | "MENTOR") { //checks if user has the required role, if not redirects to login page
     const session = await getSession();
     if (!session) redirect("/login"); // if session is null redirect to login page
