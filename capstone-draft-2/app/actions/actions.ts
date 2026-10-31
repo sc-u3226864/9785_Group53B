@@ -1,12 +1,80 @@
-//https://claude.ai/share/b2c8d32a-bef3-4292-92c7-eb976901ee3d - this prompt gave me a lot of reusable code which I was able to learn and reapply
-//to other pages and build functionality with. It helped a lot with role access, authentication, actions, prisma api actions, and page setup 
+// ------ REFERENCES
+/** [1]
+ * Description: This prompt gave me a lot of reusable code which I was able to learn and reapply
+ * to other pages and build functionality with. It helped a lot with role access, authentication, actions, prisma api actions, and page setup
+ * Reference: Anthropic. (2026). Claude [Large language model]. https://claude.ai/share/b2c8d32a-bef3-4292-92c7-eb976901ee3d
+ */
+/** [2]
+ * Description:
+ * Reference: Vercel. (n.d.). revalidatePath. Next.js Documentation. https://nextjs.org/docs/app/api-reference/functions/revalidatePath#usage
+ */
+/** [3]
+ * Description:
+ * Reference: Zod. (n.d.). Intro. https://zod.dev/
+ */
+/** [4]
+ * Description:
+ * Reference: MDN Contributors. (n.d.). FormData. MDN Web Docs. https://developer.mozilla.org/en-US/docs/Web/API/FormData
+ */
+/** [5]
+ * Description:
+ * Reference: Better Auth. (n.d.). Email & password: Sign out. https://better-auth.com/docs/authentication/email-password#sign-out
+ */
+/** [6]
+ * Description:
+ * Reference: Better Auth. (n.d.). Email & password: Request password reset. https://better-auth.com/docs/authentication/email-password#request-password-reset
+ */
+/** [7]
+ * Description:
+ * Reference: MDN Contributors. (n.d.). encodeURIComponent(). MDN Web Docs. https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
+ */
+/** [8]
+ * Description:
+ * Reference: Chandan. (2026, March 25). File uploads in Next.js (complete guide with server actions). CodeToDeploy. Medium. https://medium.com/codetodeploy/file-uploads-in-next-js-complete-guide-with-server-actions-83a5ad4ece5b
+ */
+/** [9]
+ * Description:
+ * Reference: MDN Contributors. (n.d.). File. MDN Web Docs. https://developer.mozilla.org/en-US/docs/Web/API/File
+ */
+/** [10]
+ * Description:
+ * Reference: Mimo. (n.d.). TypeScript promise: Syntax, usage, and examples. https://mimo.org/glossary/typescript/promise
+ */
+/** [11]
+ * Description:
+ * Reference: Devcode Hunter. (2024, September 12). Mastering buffers in Node.js: A complete guide with examples. Medium. https://medium.com/@devcodehunter/mastering-buffers-in-node-js-a-complete-guide-with-examples-e8e6f8e07408
+ */
+/** [12]
+ * Description:
+ * Reference: MDN Contributors. (n.d.). FormData: get() method. MDN Web Docs. https://developer.mozilla.org/en-US/docs/Web/API/FormData/get
+ */
+/** [13]
+ * Description:
+ * Reference: Prisma. (n.d.). Transactions in Prisma ORM. Prisma Documentation. https://www.prisma.io/docs/orm/fundamentals/transactions
+ */
+/** [14]
+ * Description:
+ * Reference: Prisma. (n.d.). Prisma Client API (Prisma ORM v7): update. Prisma Documentation. https://www.prisma.io/docs/orm/v7/reference/prisma-client-reference#update
+ */
+/** [15]
+ * Description:
+ * Reference: Prisma. (n.d.). Prisma Client API (Prisma ORM v7): create. Prisma Documentation. https://www.prisma.io/docs/orm/v7/reference/prisma-client-reference#create
+ */
+/** [16]
+ * Description:
+ * Reference: Better Auth. (n.d.). Email & password: API method request password reset. https://better-auth.com/docs/authentication/email-password#api-method-request-password-reset
+ */
+/** [17]
+ * Description:
+ * Reference: GeeksforGeeks. (2021, February 1). Node.js fs.rm() method. https://www.geeksforgeeks.org/node-js/node-js-fs-rm-method/
+ */
 
-"use server";
+"use server"; //[1]
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";  //https://nextjs.org/docs/app/api-reference/functions/revalidatePath#usage after a server action which changes data this will be used to revalidate the page
-import { z } from "zod";  //input validation library for forms https://zod.dev/
+import { revalidatePath } from "next/cache";  //after a server action which changes data this will be used to revalidate the page [2]
+import { z } from "zod";  //input validation library for forms [3]
 import { auth } from "../lib/auth"; 
 import prisma from "../lib/prisma";
 import { requireRole } from "../lib/session";
@@ -21,7 +89,7 @@ const maxSize = 5 * 1024 * 1024; // 5 MB
 const text = (max: number) => z.string().trim().min(1).max(max);
 
 // ------ AUTHENTICATION ACTIONS
-export async function login(formData: FormData) { //login server action, FormData explanation: https://developer.mozilla.org/en-US/docs/Web/API/FormData
+export async function login(formData: FormData) { //login server action, FormData explanation [4]
     let role: string | undefined;
     try {  //validate the email and password with better_auth api if invalid it will throw an error
         const result = await auth.api.signInEmail({
@@ -35,32 +103,31 @@ export async function login(formData: FormData) { //login server action, FormDat
 }
 
 export async function logout() {
-  await auth.api.signOut({ headers: await headers() }); //https://better-auth.com/docs/authentication/email-password#sign-out
+  await auth.api.signOut({ headers: await headers() }); //[5]
   redirect("/");
 }
 
 export async function sendPasswordLink(formData: FormData) {
-  await auth.api.requestPasswordReset({            //doesn't send email just retunrs url for testing http://better-auth.com/docs/authentication/email-password#request-password-reset
+  await auth.api.requestPasswordReset({            //doesn't send email just retunrs url for testing [6]
     body: { email: String(formData.get("email")), redirectTo: setPasswordUrl },
   });
   redirect("/login?linkSent=1");
 }
 
-export async function setPassword(formData: FormData) { //https://better-auth.com/docs/authentication/email-password#request-password-reset
+export async function setPassword(formData: FormData) { //[6]
   const token = String(formData.get("token"));
   try {
     await auth.api.resetPassword({ body: { token, newPassword: String(formData.get("password")) } });
   } catch {
     redirect(`/set-password?token=${encodeURIComponent(token)}&error=1`); //if token is invalid or expired sends back to setpassword page
-  } // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent convert a text string into a URL-safe format
+  } // convert a text string into a URL-safe format [7]
   redirect("/login");
 }
 
 // ------ EOI FORM ACTIONS
-// https://medium.com/codetodeploy/file-uploads-in-next-js-complete-guide-with-server-actions-83a5ad4ece5b
-// File interface information https://developer.mozilla.org/en-US/docs/Web/API/File used to get information from a file upload
-// Promises: https://mimo.org/glossary/typescript/promise , promises are used to give the result of an asynchonous operation
-export async function saveFile(file: File): Promise<string> { //this function is used for the CV file upload in the submitEOI function
+// File interface information used to get information from a file upload [9]
+// Promises: promises are used to give the result of an asynchonous operation [10]
+export async function saveFile(file: File): Promise<string> { //this function is used for the CV file upload in the submitEOI function [8]
   if (!file.type.startsWith("application/")) throw new Error("Must be a document"); //check file type and size
   if (file.size > maxSize) throw new Error("File too large (max 5 MB)");
 
@@ -70,13 +137,13 @@ export async function saveFile(file: File): Promise<string> { //this function is
   const dir = path.join(process.cwd(), "public", "cvs"); //saves document at public/uploads
 
   await mkdir(dir, { recursive: true }); //create the uploads directory if it doesn't exist, no error if it does exist
-  await writeFile(path.join(dir, filename), Buffer.from(await file.arrayBuffer())); //write the file to the public/cvs directory, convert the file to a buffer from an array buffer, https://medium.com/@devcodehunter/mastering-buffers-in-node-js-a-complete-guide-with-examples-e8e6f8e07408
+  await writeFile(path.join(dir, filename), Buffer.from(await file.arrayBuffer())); //write the file to the public/cvs directory, convert the file to a buffer from an array buffer [11]
 
   return `/cvs/${filename}`;
 }
 
 export async function submitEOI(formData: FormData) { //used to create eoi form entry in db
-  const file = formData.get("file"); //https://developer.mozilla.org/en-US/docs/Web/API/FormData/get this is a XMLHttpRequest API method
+  const file = formData.get("file"); //this is a XMLHttpRequest API method [12]
   if (!(file instanceof File) || file.size === 0) {
     throw new Error("Please upload your CV.");
   }
@@ -102,10 +169,10 @@ export async function approveEoi(formData: FormData) { //used to change eoi form
     where: { id: String(formData.get("id")), status: "PENDING" }, //find eoi forms with status PENDING
   });
 
-    // Both writes succeed together, or neither happens. https://www.prisma.io/docs/orm/fundamentals/transactions
+    // Both writes succeed together, or neither happens. [13]
   await prisma.$transaction([ //ensures that multiple db operations are executed as a single unit of work, and rollback if any fail
-    prisma.eOIForm.update({ where: { id: eoi.id, status: "PENDING" }, data: { status: "APPROVED" } }), //https://www.prisma.io/docs/orm/v7/reference/prisma-client-reference#update
-    prisma.user.create({  //create a new user with the eoi form data https://www.prisma.io/docs/orm/v7/reference/prisma-client-reference#create
+    prisma.eOIForm.update({ where: { id: eoi.id, status: "PENDING" }, data: { status: "APPROVED" } }), //[14]
+    prisma.user.create({  //create a new user with the eoi form data [15]
       data: {
         name: eoi.name,
         email: eoi.email,
@@ -117,7 +184,7 @@ export async function approveEoi(formData: FormData) { //used to change eoi form
     }),
   ]);
 
-  // Send the set-password link after the transaction commits (an email can't be rolled back). https://better-auth.com/docs/authentication/email-password#api-method-request-password-reset
+  // Send the set-password link after the transaction commits (an email can't be rolled back). [16]
   await auth.api.requestPasswordReset({ body: { email: eoi.email, redirectTo: setPasswordUrl } });
   revalidatePath("/dashboard");
 }
@@ -150,7 +217,7 @@ async function saveShowcaseImage(file: File): Promise<string> {
   const dir = path.join(process.cwd(), "public", "showcase"); //saves image at public/showcase
 
   await mkdir(dir, { recursive: true }); //create the uploads directory if it doesn't exist, no error if it does exist
-  await writeFile(path.join(dir, filename), Buffer.from(await file.arrayBuffer())); //write the file to the uploads directory, convert the file to a buffer from an array buffer, https://medium.com/@devcodehunter/mastering-buffers-in-node-js-a-complete-guide-with-examples-e8e6f8e07408
+  await writeFile(path.join(dir, filename), Buffer.from(await file.arrayBuffer())); //write the file to the uploads directory, convert the file to a buffer from an array buffer [11]
 
   return `/showcase/${filename}`;
 }
@@ -214,7 +281,7 @@ export async function updateShowcasePost(formData: FormData) {
   redirect("/showcase");
 }
 
-//TODO: delete files from directory https://www.geeksforgeeks.org/node-js/node-js-fs-rm-method/
+//TODO: delete files from directory [17]
 export async function deleteShowcasePost(formData: FormData) { 
   await requireRole("CONVENER");
   const id = String(formData.get("id") ?? "");
@@ -306,7 +373,7 @@ async function saveImage(file: File): Promise<string> {
   const dir = path.join(process.cwd(), "public", "uploads"); //saves image at public/uploads
 
   await mkdir(dir, { recursive: true }); //create the uploads directory if it doesn't exist, no error if it does exist
-  await writeFile(path.join(dir, filename), Buffer.from(await file.arrayBuffer())); //write the file to the uploads directory, convert the file to a buffer from an array buffer, https://medium.com/@devcodehunter/mastering-buffers-in-node-js-a-complete-guide-with-examples-e8e6f8e07408
+  await writeFile(path.join(dir, filename), Buffer.from(await file.arrayBuffer())); //write the file to the uploads directory, convert the file to a buffer from an array buffer [11]
 
   return `/uploads/${filename}`;
 }

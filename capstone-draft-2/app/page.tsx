@@ -1,6 +1,16 @@
-// REFERENCES
-// [1] https://tailwindcss.com/docs/styling-with-utility-classes
-// [2] styling inspired by https://www.canberra.edu.au/content/myuc/home.html
+// ------ REFERENCES
+/** [1]
+ * Description:
+ * Reference: Tailwind Labs. (n.d.). Styling with utility classes. Tailwind CSS. https://tailwindcss.com/docs/styling-with-utility-classes
+ */
+/** [2]
+ * Description: styling inspired by
+ * Reference: University of Canberra. (n.d.). MyUC home. https://www.canberra.edu.au/content/myuc/home.html
+ */
+/** [3]
+ * Description:
+ * Reference: Delesign Graphics. (n.d.). Free teamwork illustration [Illustration]. IconScout. https://iconscout.com/free-illustration/free-teamwork-illustration_1785594
+ */
 
 import Image from "next/image";
 import Showcase from "./components/Showcase";
@@ -8,7 +18,7 @@ import Showcase from "./components/Showcase";
 
 export default function Home() {
   return (
-    <main>
+    <main> {/*[1] [2]*/}
       <h1 className="bg-[#00809f] text-white">Welcome to the UC Capstone Page</h1>
       <h2 className="bg-[#00809f]">Connect with Sponsors and Mentors, see available projects, and get involved in the UC Capstone Project</h2>
       <div className="explore-project-cta flex flex-row ">
@@ -16,7 +26,7 @@ export default function Home() {
           <p className="text-3xl text-white">Ready to start your capstone?</p>
           <a className="text-2xl bg-[#d3eef4] text-[#006c91] py-4 rounded-sm text-center shadow-xl transition-colors duration-300 hover:bg-[#d3eef4]/50" href="/projects">Explore available projects</a>
         </div>
-        <Image src="/images/teamwork.webp" width={500} height={500} alt="Picture of the author"/> {/* https://iconscout.com/free-illustration/free-teamwork-illustration_1785594 */}
+        <Image src="/images/teamwork.webp" width={500} height={500} alt="Picture of the author"/> {/*[3]*/}
       </div>
       <p className="text-[#006c91] pl-[40px] pt-4 pb-4 text-2xl bg-[#d3eef4]">Quick Access Links</p>
       <div className="home-quick-links">

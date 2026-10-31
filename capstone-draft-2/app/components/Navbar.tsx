@@ -1,4 +1,8 @@
-// https://www.w3schools.com/css/css_navbar_horizontal.asp
+// ------ REFERENCES
+/** [1]
+ * Description:
+ * Reference: W3Schools. (n.d.). CSS horizontal navigation bar. https://www.w3schools.com/css/css_navbar_horizontal.asp
+ */
 
 'use server'
 
@@ -12,7 +16,7 @@ export async function Navbar() {
   const isLoggedIn = !!session; //checks if user is logged in to show login link
   return (
     <nav>
-      <ul className="flex flex-row justify-center bg-[#00809f] text-white justify-evenly">
+      <ul className="flex flex-row justify-center bg-[#00809f] text-white justify-evenly"> {/*[1]*/}
         <Link className="nav-bar-select" href="/">Home</Link>
         <Link className="nav-bar-select" href="/mentors">Mentors</Link>
         <Link className="nav-bar-select" href="/sponsors">Sponsors</Link>

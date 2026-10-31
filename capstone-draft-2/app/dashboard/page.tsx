@@ -1,9 +1,13 @@
-//https://claude.ai/share/b2c8d32a-bef3-4292-92c7-eb976901ee3d
+// ------ REFERENCES
+/** [1]
+ * Description:
+ * Reference: Anthropic. (2026). Claude [Large language model]. https://claude.ai/share/b2c8d32a-bef3-4292-92c7-eb976901ee3d
+ */
 import prisma from "../lib/prisma";
 import { requireRole } from "../lib/session";
 import { approveEoi, deleteEoi, reviewProject} from "../actions/actions";
 
-export default async function DashboardPage() {
+export default async function DashboardPage() { //[1]
   await requireRole("CONVENER");                   // this is a convener only page so checking logged in user is a convener
   //fetching all pending EOI forms and projects
   const eois = await prisma.eOIForm.findMany({ where: { status: "PENDING" } });

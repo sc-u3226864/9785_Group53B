@@ -1,7 +1,11 @@
-//https://claude.ai/share/b2c8d32a-bef3-4292-92c7-eb976901ee3d
+// ------ REFERENCES
+/** [1]
+ * Description:
+ * Reference: Anthropic. (2026). Claude [Large language model]. https://claude.ai/share/b2c8d32a-bef3-4292-92c7-eb976901ee3d
+ */
 import { submitEOI } from "../actions/actions";
 
-export default async function EoiPage({ searchParams }: { searchParams: Promise<{ sent?: string }> }) { //if the url has eoi?sent=1 then return thankyou message, otherwise return eoi form
+export default async function EoiPage({ searchParams }: { searchParams: Promise<{ sent?: string }> }) { //if the url has eoi?sent=1 then return thankyou message, otherwise return eoi form [1]
   const { sent } = await searchParams;
   if (sent) return <main><p className="text-center font-bold text-xl mt-[30%]">Thanks! A convener will review your expression of interest.</p></main>;
   return (
