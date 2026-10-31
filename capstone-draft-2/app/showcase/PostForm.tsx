@@ -1,5 +1,11 @@
 
 
+// ------ REFERENCES
+/** [1]
+ * Description:
+ * Reference: Crisologo, J. (2020, January 28). How to dynamically populate a year dropdown with JavaScript. Better Programming. Medium. https://medium.com/better-programming/how-to-dynamically-populate-a-year-dropdown-with-javascript-bcf4f849bc4f
+ */
+
 //this component is used to create and edit showcase posts
 //it takes in an action prop which is a function that will be called when the form is submitted
 
@@ -106,8 +112,7 @@ export default function PostForm({ action, post }: Props) { //reusable form for 
   );
 }
 
-// Date selection dropdown script
-//https://medium.com/better-programming/how-to-dynamically-populate-a-year-dropdown-with-javascript-bcf4f849bc4f
+// Date selection dropdown script [1]
 
 const currentYear = new Date().getFullYear(); //gets current year
 const earliestYear = 1967;     //year that UC started

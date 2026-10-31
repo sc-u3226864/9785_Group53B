@@ -1,5 +1,10 @@
+// ------ REFERENCES
+/** [1]
+ * Description:
+ * Reference: Vercel. (n.d.). Font optimization. Next.js Documentation. https://nextjs.org/docs/app/getting-started/fonts
+ */
 import type { Metadata } from "next";
-import { Lato } from "next/font/google"; //https://nextjs.org/docs/app/getting-started/fonts
+import { Lato } from "next/font/google"; //[1]
 import "./globals.css";
 import {Navbar} from "./components/Navbar"; //import navbar
 

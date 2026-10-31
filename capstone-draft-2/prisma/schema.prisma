@@ -1,14 +1,36 @@
+// ------ REFERENCES (Prisma schema files only support // comments)
+// [1]
+// Description:
+// Reference: Prisma. (n.d.). Author the Prisma ORM contract in PSL. Prisma Documentation. https://pris.ly/d/prisma-schema
+//
+// [2]
+// Description: prisma schema builder software
+// Reference: Prisma Schema Builder. (n.d.). Schemas. https://www.prismabuilder.io/schemas
+//
+// [3]
+// Description: Schema made with
+// Reference: Prisma Schema Builder. (n.d.). Prisma schema builder. https://www.prismabuilder.io/
+//
+// [4]
+// Description:
+// Reference: Anthropic. (2026). Claude [Large language model]. https://claude.ai/share/b2c8d32a-bef3-4292-92c7-eb976901ee3d
+//
+// [5]
+// Description:
+// Reference: Prisma. (n.d.). Relational data modeling in Prisma ORM. Prisma Documentation. https://www.prisma.io/docs/orm/data-modeling/relational-databases
+//
+// [6]
+// Description:
+// Reference: Prisma. (n.d.). Relations and joins in Prisma ORM. Prisma Documentation. https://www.prisma.io/docs/orm/fundamentals/relations-and-joins
+
 // This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// learn more about it in the docs. [1]
 
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
-//prisma schema builder software: https://www.prismabuilder.io/schemas
+//prisma schema builder software [2]
 
-//Schema made with: https://www.prismabuilder.io/
-// https://claude.ai/share/b2c8d32a-bef3-4292-92c7-eb976901ee3d
-// https://www.prisma.io/docs/orm/data-modeling/relational-databases
-// https://www.prisma.io/docs/orm/fundamentals/relations-and-joins
+//Schema made with [3] [4] [5] [6]
 
 generator client {
   provider = "prisma-client"

@@ -1,4 +1,8 @@
-// https://claude.ai/share/b2c8d32a-bef3-4292-92c7-eb976901ee3d
+// ------ REFERENCES
+/** [1]
+ * Description:
+ * Reference: Anthropic. (2026). Claude [Large language model]. https://claude.ai/share/b2c8d32a-bef3-4292-92c7-eb976901ee3d
+ */
 
 import Link from "next/link";
 import prisma from "../lib/prisma";
@@ -6,7 +10,7 @@ import DeleteButton from "./DeleteButton";
 import { getSession } from "../lib/session";
 import Image from "next/image";
 
-export default async function MentorsPage() {
+export default async function MentorsPage() { //[1]
   const session = await getSession();
   const canManage = session?.user.role === "CONVENER"; //only convener can create, edit or delete posts
   const posts = await prisma.mentorPost.findMany({ orderBy: { name: "asc" } });

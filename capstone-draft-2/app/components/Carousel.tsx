@@ -1,11 +1,19 @@
-//https://claude.ai/share/0926c9f6-5f4c-4ba8-be51-df90b8462753
+// ------ REFERENCES
+/** [1]
+ * Description:
+ * Reference: Anthropic. (2026). Claude [Large language model]. https://claude.ai/share/0926c9f6-5f4c-4ba8-be51-df90b8462753
+ */
+/** [2]
+ * Description:
+ * Reference: W3Schools. (n.d.). React useEffect. https://www.w3schools.com/react/react_useeffect.asp
+ */
 
 "use client"; //using client component because it uses useState and useEffect which are client-side hooks
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export default function Carousel({ images, interval = 4000 }: { images: string[]; interval?: number }) { //declares props for carousel component, interval is how long each image displays, images is an array of image URLs
+export default function Carousel({ images, interval = 4000 }: { images: string[]; interval?: number }) { //declares props for carousel component, interval is how long each image displays, images is an array of image URLs [1]
   const [index, setIndex] = useState(0); //tracks the slide thats showing
 
   const next = () => setIndex((i) => (i + 1) % images.length); //this increases the current index of the image showing by 1 so it shows the next image in the array
@@ -14,7 +22,7 @@ export default function Carousel({ images, interval = 4000 }: { images: string[]
   // Auto-advance, restarting the timer whenever the slide changes
   useEffect(() => {
     if (images.length < 2) return; //if there are 0 or 1 image it returns nothing or stays on that image
-    const id = setTimeout(next, interval); //calls next to autoscroll after the interval time has passed https://www.w3schools.com/react/react_useeffect.asp
+    const id = setTimeout(next, interval); //calls next to autoscroll after the interval time has passed [2]
     return () => clearTimeout(id); //cleanup function
   }, [index, images.length, interval]); //dependancy array: the useEffect hook will re-run if any of these values change
 
