@@ -1,4 +1,5 @@
 //https://www.prisma.io/docs/orm/v7/prisma-migrate/workflows/seeding
+//https://claude.ai/share/b2c8d32a-bef3-4292-92c7-eb976901ee3d
 
 import "dotenv/config";                            // must come first so env vars are loaded
 import prisma from "../app/lib/prisma";

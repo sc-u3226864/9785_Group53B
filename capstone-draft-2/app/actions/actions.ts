@@ -214,6 +214,7 @@ export async function updateShowcasePost(formData: FormData) {
   redirect("/showcase");
 }
 
+//TODO: delete files from directory https://www.geeksforgeeks.org/node-js/node-js-fs-rm-method/
 export async function deleteShowcasePost(formData: FormData) { 
   await requireRole("CONVENER");
   const id = String(formData.get("id") ?? "");

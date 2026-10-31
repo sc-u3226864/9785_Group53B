@@ -11,7 +11,7 @@ export default async function SignInPage({
   return (
     <main>
       <h1 className="text-[#006c91]">Sign in</h1>
-      {error && <p>Invalid email or password.</p>}
+      {error && <p className="text-center">Invalid email or password.</p>}
       <div className="flex flex-col items-center mt-3">
         <form className="flex flex-col"  action={login}>
           <input className="form-input mb-2 pl-1" name="email" type="email" placeholder="Email" required />
@@ -21,7 +21,7 @@ export default async function SignInPage({
       </div>
 
       <h2 className="text-gray-700! text-xl! mt-4!">Forgot your password, or your invite link expired?</h2>
-      {linkSent && <p>If that email has an account, a new link is on its way.</p>}
+      {linkSent && <p className="text-center mb-1">If that email has an account, a new link is on its way.</p>}
       <div className="flex flex-col items-center">
         <form className="flex flex-col" action={sendPasswordLink}>
           <input className="form-input mb-2 pl-1" name="email" type="email" placeholder="Email" required />

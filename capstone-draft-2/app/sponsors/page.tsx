@@ -1,4 +1,3 @@
-// TO-DO setup mentor showcase
 
 import Link from "next/link";
 import prisma from "../lib/prisma";

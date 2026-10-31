@@ -6,12 +6,14 @@ import DeleteButton from "./DeleteButton";
 export default async function ProjectsPage({ searchParams }: { searchParams: Promise<{ submitted?: string }> }) {
   const session = await getSession();
   const canManage = session?.user.role === "SPONSOR";
+  const isConvener = session?.user.role === "CONVENER";
   const { submitted } = await searchParams;
   const projects = await prisma.project.findMany({
     where: { status: "APPROVED" },                      // the public only sees approved projects
-    include: { sponsor: { select: { name: true } } },   // name of the sponsor
+    include: { sponsor: { select: { name: true , organisation: true }, } },   // name of the sponsor
     orderBy: { createdAt: "desc" },
   });
+  
 
   return (
     <main>
@@ -25,13 +27,14 @@ export default async function ProjectsPage({ searchParams }: { searchParams: Pro
       {projects.map((p) => (  // display the approved projects
         <article className="post" key={p.id}>
           <div>
-            <h2>{p.title}</h2>
-            <p>Sponsored by {p.sponsor.name}</p>
-            <DeleteButton id={p.id} /> 
+            <h2 className="text-2xl! text-white! opacity-100! font-bold px-1!">{p.title}</h2>
+            <p className="text-xl">Sponsored by: {p.sponsor.name}</p>
+            <p className="mb-1">Organisation: {p.sponsor.organisation}</p>
+            {isConvener && <DeleteButton id={p.id} />}
           </div>
-          <p>Description: {p.description}</p>
-          <p>Scope: {p.scope}</p>
-          <p>Skills required: {p.skills}</p>
+          <p><b>Description:</b> {p.description}</p>
+          <p><b>Scope:</b> {p.scope}</p>
+          <p><b>Skills required:</b> {p.skills}</p>
         </article>
       ))}
     </main>

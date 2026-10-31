@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+html{
+  overscroll-behavior: none;
+}
+
 body {
   font-family: 'Lato', Arial, Helvetica, sans-serif;
   background-image: url('/images/indigenous_art.jpg');

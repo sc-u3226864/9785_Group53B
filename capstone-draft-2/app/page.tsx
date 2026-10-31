@@ -18,14 +18,20 @@ export default function Home() {
         </div>
         <Image src="/images/teamwork.webp" width={500} height={500} alt="Picture of the author"/> {/* https://iconscout.com/free-illustration/free-teamwork-illustration_1785594 */}
       </div>
-      <p className="text-[#006c91] pl-[40px] pt-4 pb-4 text-xl bg-[#d3eef4]">Quick Access Links</p>
+      <p className="text-[#006c91] pl-[40px] pt-4 pb-4 text-2xl bg-[#d3eef4]">Quick Access Links</p>
       <div className="home-quick-links">
-        <a className="link-buttons" href="/eoi">Join as a mentor or sponsor</a>
-        <a className="link-buttons" href="/showcase">Explore project showcase</a>
+        <a className="link-buttons" href="/eoi">Submit your EOI</a>
         <a className="link-buttons" href="/mentors">See our Mentors</a>
         <a className="link-buttons" href="/sponsors">See our Sponsors</a>
       </div>
-      <Showcase />
+      <div className="flex flex-row mx-3 bg-[#00537a] my-2 rounded-2xl pr-4 pt-4 pl-2">
+        <div className="flex flex-col items-center text-center gap-4 ">
+          <h1 className="text-[#ffffff]">Our Project Showcase</h1>
+          <p className="text-wrap text-[#92d6e3] pr-2 text-xl">Browse our showcase gallery to explore past projects and celebrate the achievements of our talented students.</p>
+          <a className="link-buttons" href="/showcase">Explore project showcase</a>
+        </div>
+        <Showcase />
+      </div>
     </main>
   );
 }

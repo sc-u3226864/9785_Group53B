@@ -19,7 +19,7 @@ export default async function EoiPage({ searchParams }: { searchParams: Promise<
             <input className="form-input" name="organisation" placeholder="Organisation (optional)" />
             <input className="form-input" name="phone" placeholder="Phone (optional)" />
             <textarea className="form-input" name="experience" placeholder="Tell us about yourself" required />
-            <input className="hover:text-[#009abc] cursor-pointer border-black border-1 pl-1 rounded-md" type="file" name="file" required/>
+            <input className="hover:text-[#009abc] cursor-pointer border-black border-1 pl-1 rounded-md" type="file" name="file" required accept="application/*"/>
             <button className="form-button">Submit</button>
           </form>
         </div>
