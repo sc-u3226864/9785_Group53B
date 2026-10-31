@@ -1,18 +1,18 @@
 // ------ REFERENCES
 /** [1]
- * Description: setting up better_auth client
+ * Description: followed steps with setting up better_auth server instance
  * Reference: Better Auth. (n.d.). Installation. https://better-auth.com/docs/installation
  */
 /** [2]
- * Description:
+ * Description: steps for email and password configuration
  * Reference: Better Auth. (n.d.). Email & password: Configuration. https://better-auth.com/docs/authentication/email-password#configuration
  */
 /** [3]
- * Description:
+ * Description: function that sends the password reset link - local for now
  * Reference: Better Auth. (n.d.). Email & password: Request password reset. https://better-auth.com/docs/authentication/email-password#request-password-reset
  */
 /** [4]
- * Description:
+ * Description: followed steps for the nextCookies plugin so session cookies are set when auth functions are called from server actions
  * Reference: Better Auth. (n.d.). Next.js integration: Server action cookies. https://better-auth.com/docs/integrations/next#server-action-cookies
  */
 
@@ -40,12 +40,12 @@ export const auth = betterAuth({ //[1]
     }
   },
 
-  session: {  //using the session cookie so page doesn't have to query the database on every getSession() request when checking role, only every 5 minutes
+  session: {  //using the session cookie so page doesn't have to query the database on every getSession() request when checking role, only every 5 minutes 
     cookieCache: {
       enabled: true,
       maxAge: 5 * 60, // re-check the database every 5 minutes
     },
   },
 
-  plugins: [nextCookies()],    //so the browser can store the session [4]
+  plugins: [nextCookies()],    // sets session cookies in server actions[4]
 });

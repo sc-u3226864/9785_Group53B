@@ -1,15 +1,16 @@
 // ------ REFERENCES
 /** [1]
- * Description:
+ * Description: Documentation to help with styling in tailwind
  * Reference: Tailwind Labs. (n.d.). Styling with utility classes. Tailwind CSS. https://tailwindcss.com/docs/styling-with-utility-classes
  */
 /** [2]
- * Description: styling inspired by
+ * Description: styling inspired by UC website
  * Reference: University of Canberra. (n.d.). MyUC home. https://www.canberra.edu.au/content/myuc/home.html
  */
 /** [3]
- * Description:
+ * Description: clip art used on the home page
  * Reference: Delesign Graphics. (n.d.). Free teamwork illustration [Illustration]. IconScout. https://iconscout.com/free-illustration/free-teamwork-illustration_1785594
+ * Licence: Creative Commons
  */
 
 import Image from "next/image";

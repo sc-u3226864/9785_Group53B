@@ -1,71 +1,67 @@
 // ------ REFERENCES
 /** [1]
- * Description: This prompt gave me a lot of reusable code which I was able to learn and reapply
- * to other pages and build functionality with. It helped a lot with role access, authentication, actions, prisma api actions, and page setup
+ * Description: This prompt gave me a lot of reusable code which I was able to learn from and reapply
+ * to other pages to build functionality with. It helped a lot with role access, better auth authentication setup, actions, prisma api operation, and page setup
  * Reference: Anthropic. (2026). Claude [Large language model]. https://claude.ai/share/b2c8d32a-bef3-4292-92c7-eb976901ee3d
  */
 /** [2]
- * Description:
+ * Description: This was used after CRUD operations to update any changed pages
  * Reference: Vercel. (n.d.). revalidatePath. Next.js Documentation. https://nextjs.org/docs/app/api-reference/functions/revalidatePath#usage
  */
 /** [3]
- * Description:
+ * Description: Zod was used in the server actions to validate inputs. This ensures form inputs are type-safe
  * Reference: Zod. (n.d.). Intro. https://zod.dev/
  */
 /** [4]
- * Description:
+ * Description: FormData is a web API used to collect html form inputs and pass them as key value pairs. In this project it's used in functions to collect/manipulate data before it's committed to the db
  * Reference: MDN Contributors. (n.d.). FormData. MDN Web Docs. https://developer.mozilla.org/en-US/docs/Web/API/FormData
  */
 /** [5]
- * Description:
+ * Description: The steps outlined in this documentation was used to setup the email and password authentication. It provided a range of functions used in this assignment such as sign-out, sign-in, password reset etc.
  * Reference: Better Auth. (n.d.). Email & password: Sign out. https://better-auth.com/docs/authentication/email-password#sign-out
  */
 /** [6]
- * Description:
+ * Description: ^ same as above , this function was used for requesting a password reset
  * Reference: Better Auth. (n.d.). Email & password: Request password reset. https://better-auth.com/docs/authentication/email-password#request-password-reset
  */
 /** [7]
- * Description:
+ * Description: This turns the sign in token into a format safe for URL's
  * Reference: MDN Contributors. (n.d.). encodeURIComponent(). MDN Web Docs. https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
  */
 /** [8]
- * Description:
+ * Description: This helped with creating the file upload functionality in the EOI form, it was also adapted for image upload in showcase, mentor and sponsor posts
  * Reference: Chandan. (2026, March 25). File uploads in Next.js (complete guide with server actions). CodeToDeploy. Medium. https://medium.com/codetodeploy/file-uploads-in-next-js-complete-guide-with-server-actions-83a5ad4ece5b
  */
 /** [9]
- * Description:
+ * Description: the File API was used to get metadata from a file upload e.g. file.type returns the extension of the file thats uploaded in our forms
  * Reference: MDN Contributors. (n.d.). File. MDN Web Docs. https://developer.mozilla.org/en-US/docs/Web/API/File
  */
 /** [10]
- * Description:
+ * Description: Promises are used for asynchronous actions throughout the functions. It ensures that the program doesn't halt when a function that takes a long time is reliant on another, e.g. API calls to the DB can be slow so providing a promise means the function can continue while the call is happening in the background
  * Reference: Mimo. (n.d.). TypeScript promise: Syntax, usage, and examples. https://mimo.org/glossary/typescript/promise
  */
 /** [11]
- * Description:
+ * Description: Buffers are used for temporary storage on the server memory when a file is being uploaded and help with handling raw binary data like images and pdf's. It's used in this project for turning the file and image uploads into a buffer and then writes them to the directory
  * Reference: Devcode Hunter. (2024, September 12). Mastering buffers in Node.js: A complete guide with examples. Medium. https://medium.com/@devcodehunter/mastering-buffers-in-node-js-a-complete-guide-with-examples-e8e6f8e07408
  */
 /** [12]
- * Description:
+ * Description: used for getting specific fields, or FormData keys, on the submitted form
  * Reference: MDN Contributors. (n.d.). FormData: get() method. MDN Web Docs. https://developer.mozilla.org/en-US/docs/Web/API/FormData/get
  */
 /** [13]
- * Description:
+ * Description: transactions ensure that when multiple data operations are run together, if one of them fails, the whole block will roll back
  * Reference: Prisma. (n.d.). Transactions in Prisma ORM. Prisma Documentation. https://www.prisma.io/docs/orm/fundamentals/transactions
  */
 /** [14]
- * Description:
+ * Description: prisma client API operation used to update entries in the database
  * Reference: Prisma. (n.d.). Prisma Client API (Prisma ORM v7): update. Prisma Documentation. https://www.prisma.io/docs/orm/v7/reference/prisma-client-reference#update
  */
 /** [15]
- * Description:
+ * Description: prisma client API operation used to update entries in the database
  * Reference: Prisma. (n.d.). Prisma Client API (Prisma ORM v7): create. Prisma Documentation. https://www.prisma.io/docs/orm/v7/reference/prisma-client-reference#create
  */
 /** [16]
- * Description:
- * Reference: Better Auth. (n.d.). Email & password: API method request password reset. https://better-auth.com/docs/authentication/email-password#api-method-request-password-reset
- */
-/** [17]
- * Description:
+ * Description: This wasn't used but was investigated for deleting files from the directory following a deletion of the record from the database
  * Reference: GeeksforGeeks. (2021, February 1). Node.js fs.rm() method. https://www.geeksforgeeks.org/node-js/node-js-fs-rm-method/
  */
 
@@ -184,7 +180,7 @@ export async function approveEoi(formData: FormData) { //used to change eoi form
     }),
   ]);
 
-  // Send the set-password link after the transaction commits (an email can't be rolled back). [16]
+  // Send the set-password link after the transaction commits (an email can't be rolled back). [6]
   await auth.api.requestPasswordReset({ body: { email: eoi.email, redirectTo: setPasswordUrl } });
   revalidatePath("/dashboard");
 }
@@ -281,7 +277,7 @@ export async function updateShowcasePost(formData: FormData) {
   redirect("/showcase");
 }
 
-//TODO: delete files from directory [17]
+//TODO: delete files from directory [16]
 export async function deleteShowcasePost(formData: FormData) { 
   await requireRole("CONVENER");
   const id = String(formData.get("id") ?? "");

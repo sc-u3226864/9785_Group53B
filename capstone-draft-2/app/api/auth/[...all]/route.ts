@@ -1,6 +1,6 @@
 // ------ REFERENCES
 /** [1]
- * Description:
+ * Description: betterauth client for using the api operations. I followed the betterauth nextjs integration documentation
  * Reference: Better Auth. (n.d.). Next.js integration: Create a client. https://better-auth.com/docs/integrations/next#create-a-client
  */
 

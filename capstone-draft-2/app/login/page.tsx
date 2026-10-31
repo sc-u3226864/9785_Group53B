@@ -1,10 +1,10 @@
 // ------ REFERENCES
 /** [1]
- * Description:
- * Reference: Vercel. (n.d.). page.js: Displaying content based on params. Next.js Documentation. https://nextjs.org/docs/app/api-reference/file-conventions/page#displaying-content-based-on-params
+ * Description: the page receives the URL’s search parameters as a prop, which are used to decide which message to show after a login attempt or password reset request
+ * Reference: NextJS. (n.d.). page.js: Displaying content based on params. Next.js Documentation. https://nextjs.org/docs/app/api-reference/file-conventions/page#displaying-content-based-on-params
  */
 /** [2]
- * Description:
+ * Description: prompt that helped with setting up this page, helped with roles and form setup
  * Reference: Anthropic. (2026). Claude [Large language model]. https://claude.ai/share/b2c8d32a-bef3-4292-92c7-eb976901ee3d
  */
 import { login, sendPasswordLink} from "../actions/actions";
@@ -12,7 +12,7 @@ import { login, sendPasswordLink} from "../actions/actions";
 export default async function SignInPage({ //[2]
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; linkSent?: string }>;  //checks if url has error or linkSent query params and displays the appropriate message
+  searchParams: Promise<{ error?: string; linkSent?: string }>;  // if url has error or linkSent query params and displays the appropriate message
 }) {
   const { error, linkSent } = await searchParams; //returns object with error and linkSent if they exist in the url e.g. /sign-in?error=1 or /sign-in?linkSent=1 [1]
   return (

@@ -2,7 +2,7 @@
 
 // ------ REFERENCES
 /** [1]
- * Description:
+ * Description: This provided a good basis for the multi-select year dropdown function
  * Reference: Crisologo, J. (2020, January 28). How to dynamically populate a year dropdown with JavaScript. Better Programming. Medium. https://medium.com/better-programming/how-to-dynamically-populate-a-year-dropdown-with-javascript-bcf4f849bc4f
  */
 

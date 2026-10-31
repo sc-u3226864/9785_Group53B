@@ -1,10 +1,10 @@
 // ------ REFERENCES
 /** [1]
- * Description:
+ * Description: This prompt I used to generate the code for the carousel component
  * Reference: Anthropic. (2026). Claude [Large language model]. https://claude.ai/share/0926c9f6-5f4c-4ba8-be51-df90b8462753
  */
 /** [2]
- * Description:
+ * Description: useEffect is used to setup the autoscroll, when timeout finishes it calls next() to go to the next image, clearTimeout clears the timer and then the useEffect function starts again
  * Reference: W3Schools. (n.d.). React useEffect. https://www.w3schools.com/react/react_useeffect.asp
  */
 

@@ -1,7 +1,7 @@
 // ------ REFERENCES
 /** [1]
  * Description:
- * Reference: Vercel. (n.d.). Font optimization. Next.js Documentation. https://nextjs.org/docs/app/getting-started/fonts
+ * Reference: Next.js. (n.d.). Font optimization. Next.js Documentation. https://nextjs.org/docs/app/getting-started/fonts
  */
 import type { Metadata } from "next";
 import { Lato } from "next/font/google"; //[1]

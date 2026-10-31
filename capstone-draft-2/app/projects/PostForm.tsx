@@ -1,7 +1,4 @@
 
-//this component is used to create and edit projects
-//it takes in an action prop which is a function that will be called when the form is submitted
-
 type Props = { // what a page must pass in
   action: (formData: FormData) => Promise<void>;
   project?: {

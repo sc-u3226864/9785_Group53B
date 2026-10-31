@@ -1,6 +1,6 @@
 // ------ REFERENCES
 /** [1]
- * Description:
+ * Description: used to help with making the Navbar
  * Reference: W3Schools. (n.d.). CSS horizontal navigation bar. https://www.w3schools.com/css/css_navbar_horizontal.asp
  */
 

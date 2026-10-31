@@ -1,36 +1,29 @@
 // ------ REFERENCES (Prisma schema files only support // comments)
+// 
 // [1]
-// Description:
-// Reference: Prisma. (n.d.). Author the Prisma ORM contract in PSL. Prisma Documentation. https://pris.ly/d/prisma-schema
-//
-// [2]
-// Description: prisma schema builder software
-// Reference: Prisma Schema Builder. (n.d.). Schemas. https://www.prismabuilder.io/schemas
-//
-// [3]
-// Description: Schema made with
+// Description: Schema made with prisma schema builder software
 // Reference: Prisma Schema Builder. (n.d.). Prisma schema builder. https://www.prismabuilder.io/
 //
-// [4]
-// Description:
+// [2]
+// Description: this prompt helped with initial project and database setup
 // Reference: Anthropic. (2026). Claude [Large language model]. https://claude.ai/share/b2c8d32a-bef3-4292-92c7-eb976901ee3d
 //
-// [5]
-// Description:
+// [3]
+// Description: guidance on the prisma ORM setup
 // Reference: Prisma. (n.d.). Relational data modeling in Prisma ORM. Prisma Documentation. https://www.prisma.io/docs/orm/data-modeling/relational-databases
 //
-// [6]
-// Description:
+// [4]
+// Description: relations are used throughout the schema to relate entries to eachother
 // Reference: Prisma. (n.d.). Relations and joins in Prisma ORM. Prisma Documentation. https://www.prisma.io/docs/orm/fundamentals/relations-and-joins
 
 // This is your Prisma schema file,
-// learn more about it in the docs. [1]
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
-//prisma schema builder software [2]
+//prisma schema builder software [1]
 
-//Schema made with [3] [4] [5] [6]
+//Schema made with [2] [3] [4]
 
 generator client {
   provider = "prisma-client"
@@ -56,7 +49,7 @@ enum Status {     //status of EOI submissions
   REJECTED
 }
 
-// --------- Better Auth user and session models
+// --------- Better Auth default user and session models: https://www.prisma.io/docs/guides/authentication/better-auth/nextjs#32-add-better-auth-models-to-your-schema
 
 model User {
   id            String    @id   @default(cuid())
