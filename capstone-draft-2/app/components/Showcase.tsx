@@ -8,7 +8,7 @@ import fs from "fs";
 import path from "path";
 import Carousel from "./Carousel";
 
-// Server component: reads every image in public/showcase at build/request time [1]
+// reads every image in public/showcase at build/request time [1]
 export default function Showcase() {
   const dir = path.join(process.cwd(), "public", "showcase"); //location of the images in the showcase folder
   const images = fs
