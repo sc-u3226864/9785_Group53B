@@ -94,9 +94,10 @@ We track deadlines through our GitHub project and weekly scrum meetings, address
 ## Step 3: Running the assignment
 
 
+For Windows users, commands can be done using WSL, using the Linux install of node
 1.  in your terminal make sure your in the right directory - `cd capstone-draft-2`
 2. make sure you have node installed
-    * check version `node -v` install v24.22.0
+    * check version `node -v` install v24.22.1
     * if you dont't have it follow the instructions here: [https://nodejs.org/en/download](https://nodejs.org/en/download) 
 3. prisma setup, run `npm install prisma --save-dev`. After prisma is installed, run `npx prisma migrate dev` it should be already synced, but it's good practice 
 4. generate the prisma client `npx prisma generate` 
