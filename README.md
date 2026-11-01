@@ -52,7 +52,7 @@ We track deadlines through our GitHub project and weekly scrum meetings, address
 
 1. Install [Visual Studio Code](https://code.visualstudio.com/download) and [Git](https://git-scm.com/downloads).
 
-1. In VS Code, select **Terminal** > **New Terminal**, then check that Git is available:
+2. In VS Code, select **Terminal** > **New Terminal**, then check that Git is available:
 
     ```bash
     git --version
@@ -60,20 +60,34 @@ We track deadlines through our GitHub project and weekly scrum meetings, address
 
     You should see a Git version number. If the command isn't found, restart VS Code after installing Git. If it still fails, see [source control troubleshooting](/docs/sourcecontrol/troubleshooting.md).
 
-1. Configure the author name and email for your commits. Replace the placeholders with your details:
+
+3. Set the name and email Git records as the author of your commits.
+
+    First, check whether they're already set:
+
+    ```bash
+    git config --global user.name
+    git config --global user.email
+    ```
+
+    If both commands print a value, skip to the next step. If not, run these commands, replacing the placeholders with your own details:
 
     ```bash
     git config --global user.name "<your-name>"
     git config --global user.email "<your-email>"
     ```
 
-    Skip this step if your identity is already configured. These values identify the author in Git history, not your sign-in credentials. The `--global` option sets the default for your repositories. If you publish commits, their author information is also shared.
+    Keep in mind:
+
+    - These values only label your commits. They aren't your sign-in credentials.
+    - `--global` makes them the default for every repository on this computer.
+    - Anyone who can see commits you publish can see this name and email.
 
 <a name="option-b-initialize-a-repository-in-a-local-folder"></a>
 (source - https://code.visualstudio.com/docs/sourcecontrol/quickstart)
 
 ## Step 1: Cloning the Repo
-1. Go to Source Control in the left panel
+1. Go to Source Control in the left panel - if this isn't visible check you don't have pending VSCode updates
 2. Click 'Clone Repository'
 3. Paste in repository URL
 ![Screenshot showing the Clone Repository prompt in VS Code.](https://code.visualstudio.com/assets/docs/sourcecontrol/repos-remotes/github-clone.png)
@@ -84,7 +98,7 @@ We track deadlines through our GitHub project and weekly scrum meetings, address
 <img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/3cdd85d1-1574-4649-9e80-c4252e0dd74e" />
 
 2. rename the file to '.env' so .gitignore picks it up - this file should NEVER be committed publicly
-3. DATABASE_URL: I have sent you all a link to the Prisma Console to your UC emails. Go to Databases > 'Lively Peach Colt' > Dashboard > click the Connect button > Quick Connect > copy the URL and paste into the field in you .env file
+3. DATABASE_URL: I have sent you all a link to the Prisma Console to your UC emails. Go to Projects > capstone > Databases (left) > 'Lively Peach Colt' > Dashboard > click the Connect button > Quick Connect > copy the URL and paste into the field in your .env file
 <img width="600" height="400" alt="image" src="https://github.com/user-attachments/assets/17bc06d2-c2b3-48e7-bafd-c7e34cc0df46" />
 
 
