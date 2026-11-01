@@ -1,0 +1,14 @@
+## access for each role ##
+Guest / Global access (access availible to this roles is present for all other roles)
+    view access to showcase, mentors, sponsors, projects pages
+    submission access for EOIs
+    account creation request access (tied to EOI)
+
+
+All users
+    Request to reset password
+
+Convenor
+    view and aproval access for EOIs
+    edit access for projects, mentors, sponsors, showcase pages
+    create access for showcase
