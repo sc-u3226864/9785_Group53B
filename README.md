@@ -88,7 +88,7 @@ We track deadlines through our GitHub project and weekly scrum meetings, address
 <img width="600" height="400" alt="image" src="https://github.com/user-attachments/assets/17bc06d2-c2b3-48e7-bafd-c7e34cc0df46" />
 
 
-4. BETTER_AUTH_URL & BETTER_AUTH_SECRET: there are instructions on setting this up in the .env file - *hint:* https://localhost.co/3000
+4. BETTER_AUTH_URL & BETTER_AUTH_SECRET: there are instructions on setting this up in the .env file - *hint:* http://localhost:3000/
 5. SEED_CONVENER_EMAIL: when you run the seed file in future steps this is the email which will be associated with the initial convener role and you'll have to set a password for
 
 ## Step 3: Running the assignment
