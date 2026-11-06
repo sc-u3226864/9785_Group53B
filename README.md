@@ -128,6 +128,8 @@ npx prisma
 
 ## Summary
 
+Demo Video (you must be signed into the UC tenant to view i.e. example@uni.canberra.edu.au): https://unicanberraedu.sharepoint.com/:v:/s/9785-53b/IQBR3o23WGJsQbT3PAt3p3h9AUhc5FZZRopWuDyQKSjKsXg
+
 To build our app we used a combination of research, official documentation, community forums and AI guidance. Because of blockers during the semester, inlcuding technical issues and team member capacity, we had three weeks to build the app and one week to style it. This compressed timeframe showed clearly where AI could make development more efficient, and where it still needed careful human oversight.
 
 The app is intented to showcase mentors and sponsors to entice future connections with industry professionals. We also want to celebrate past projects with our project showcase. It also has an expression of interest form for prospective mentors and sponsors, and functionality for sponsors to submit project proposals so they can become available to students. 
